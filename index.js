@@ -1,85 +1,77 @@
-const express = require('express')
-const mysql_handler = require("./mysql_handler")
-const bcrypt = require("bcryptjs")
-const cookieParser = require("cookie-parser")
-const jwt = require("jsonwebtoken")
-const bodyParser = require("body-parser")
-const app = express()
+// Import Packages
+const express = require('express');
+const bcrypt = require("bcryptjs");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
 const uuid = require("uuid");
-const port = 3000
 
-const SECRET_KEY = "KEY"
+// Import Modules
+const mysql_handler = require("./mysql_handler");
 
-app.set("view engine", "ejs")
+// Global Variables
+const app = express();
+const port = 3000;
+const SECRET_KEY = "KEY";
+
+// Express App Setup
+app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(cookieParser());
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 app.use(express.static(__dirname + "/static"));
 
-/*
-const authcookie = req.cookies.authcookie;
-
-if(!authcookie){
-    return false;
-}
-
-jwt.verify(authcookie, SECRET_KEY, (err, data) =>{
-    if(err){
-        return false;
-    } else if(data.user){
-        return true;
-    }
-})
-*/
-
+// Authentication Handlers
+// Check if user is authenticated and redirect to login if not
 function authenticatedHandler(req, res, next){
-    const authcookie = req.cookies.authcookie;
+    const authcookie = req.cookies.authcookie; // Get authcookie from cookie
 
-    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{
-        if(err){
-            console.log(err)
-            res.redirect("/login")
-        } else if(data.user){
-            req.user = data.user;
-            mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, function(err, result){
+    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{  // Verify authcookie
+        if(err){ // If authcookie is invalid
+            console.log(err);
+            res.redirect("/login");
+        } else if(data.user){ // If authcookie is valid
+            req.user = data.user; // Set user to data.user
+            mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
                 if(err) console.log(err);
-                let user = JSON.parse(JSON.stringify(result))[0];
-                req.isAdmin = user.isAdmin
-                req.username = user.username
-                req.firstname = user.firstname
-                req.lastname = user.lastname
-                next();
+                let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
+                // Set user to req.user
+                req.isAdmin = user.isAdmin;
+                req.username = user.username;
+                req.firstname = user.firstname;
+                req.lastname = user.lastname;
+                next(); // Continue to next handler
             });
-
-            
         }
-    })
+    });
 }
 
-function notAuthenticatedHandler(req, res, next){
-    const authcookie = req.cookies.authcookie;
+// Check if user is not authenticated and redirect to home if so
+function notAuthenticatedHandler(req, res, next){ 
+    const authcookie = req.cookies.authcookie; // Get authcookie from cookie
 
-    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{
-        if(err){
-            console.log(err)
-            next(); 
-        } else if(data.user){
-            res.redirect("/")
-                      
+    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{ // Verify authcookie
+        if(err){ // If authcookie is invalid
+            console.log(err);
+            next(); // Continue to next handler
+        } else if(data.user){ // If authcookie is valid
+            res.redirect("/");      
         }
-    })
+    });
 }
 
-app.get("/", authenticatedHandler, (req, res) => {
+// Homepage
+app.get("/", authenticatedHandler, (req, res) => { 
     let dict = {
         title: "Hallo",
         isAdmin: req.isAdmin
     }
 
     res.render('index', dict)
-})
+});
 
+// Product Page
 app.get("/product/:productId", (req, res) => {
     let productId = req.params.productId;
     console.log(productId);
@@ -94,8 +86,9 @@ app.get("/product/:productId", (req, res) => {
         }
         res.render('product', dict)
     });
-})
+});
 
+// Search Page
 app.get("/search", (req, res) => {
     var products = [
         {
@@ -136,18 +129,19 @@ app.get("/search", (req, res) => {
         
         res.render('search', dict)
     });
-})
+});
 
-// Order
+// Order Page
 app.get("/order/:productId/:quantity/", authenticatedHandler, (req, res) => {
 
-    let error = ""
-    mysql_handler.con.query(`SELECT * FROM products WHERE id=${req.params.productId}`, function(err, result){
+    let error = "";
+    mysql_handler.con.query(`SELECT * FROM products WHERE id=${req.params.productId}`, function(err, result){ // Get product from database
         if(err) throw err;       
-        result = JSON.parse(JSON.stringify(result))[0];
 
-        if(req.params.quantity > result.quantity){
-            error = "Nicht genug Produkte vorhanden"
+        result = JSON.parse(JSON.stringify(result))[0]; // Parse result from database
+
+        if(req.params.quantity > result.quantity){ // If quantity is higher than available quantity
+            error = "Nicht genug Produkte vorhanden";
         }
 
         let dict = {
@@ -157,18 +151,21 @@ app.get("/order/:productId/:quantity/", authenticatedHandler, (req, res) => {
             quantity: req.params.quantity
         }
 
-        res.render('order', dict)
+        res.render('order', dict);
     });   
-})
+});
 
+// Order Success Page
 app.get("/order_success/:trackingnumber", authenticatedHandler, (req, res) => {
     let dict = {
         title: "Bestellung erfolgreich",
         trackingnumber: req.params.trackingnumber
     }
 
-    res.render('order_success', dict)
-})
+    res.render('order_success', dict);
+});
+
+// Order POST Request
 app.post("/order", authenticatedHandler, (req, res) => {
     let productId = req.body.productId;
     let quantity = req.body.quantity;
@@ -179,51 +176,56 @@ app.post("/order", authenticatedHandler, (req, res) => {
         result = JSON.parse(JSON.stringify(result))[0];
 
         if(quantity > result.quantity){
-            res.redirect(`/order/${productId}/${quantity}/`)
+            res.redirect(`/order/${productId}/${quantity}/`);
         }else{
-            order_trackingnumber = uuid.v4()
-            mysql_handler.createOrder(userId, order_trackingnumber, 0, productId, quantity)    
+            order_trackingnumber = uuid.v4();
+            mysql_handler.createOrder(userId, order_trackingnumber, 0, productId, quantity) ;   
     
-            res.redirect("/order_success/" + order_trackingnumber)
+            res.redirect("/order_success/" + order_trackingnumber);
         }        
     });
-})
+});
 
 
 // Admin
 app.get("/admin/product/delete/:productId", authenticatedHandler, (req, res) => {
     if(req.isAdmin){
-        productId = req.params.productId
+        productId = req.params.productId;
         mysql_handler.con.query(`DELETE FROM products WHERE id=${productId}`, function(err, result){
             if(err) console.log(err);
         });
     }
-})
+});
 
-// AUTH
+// Authentication
+// Logout
 app.get("/logout/", authenticatedHandler, (req, res) => {
-    res.clearCookie("authcookie")
-    res.redirect("/")
-})
+    res.clearCookie("authcookie"); // Clear cookie
+    res.redirect("/");
+});
 
+// Register Page
 app.get("/register/:error?", notAuthenticatedHandler, (req, res) => {
     let dict = {
         title: "Register",
         error: req.params.error
     }
-    res.render('register', dict)    
-})
+    res.render('register', dict); 
+});
 
+// Login Page
 app.get("/login/:error?", notAuthenticatedHandler, (req, res) => {
     let dict = {
         title: "Login",
         error: req.params.error
     }
 
-    res.render('login', dict)    
-})
+    res.render('login', dict);
+});
 
+// Register POST Request
 app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
+    // Get data from POST request
     let username = req.body.username;
     let email = req.body.email;
     let password1 = req.body.password1;
@@ -237,51 +239,52 @@ app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
     let cityName = req.body.cityName;
     let country = req.body.country;
 
-    error = ""
+    let error = ""; // Error message
 
-    if(password1 != password2){
+    if(password1 != password2){ // If passwords don't match
         error += "Passwörter sind unterschiedlich!";
-    }else if(password1.length < 8){
-        error += "Passwort muss mindestens 8 Zeichen lang sein!"
+    }else if(password1.length < 8){ // If password is too short
+        error += "Passwort muss mindestens 8 Zeichen lang sein!";
     }
-    if(username.length < 3){
+    if(username.length < 3){ // If username is too short
         error += "<br> Der Benutzername muss mindestens 3 Zeichen lang sein!"; 
-    }else if(username.length > 30){
+    }else if(username.length > 30){ // If username is too long
         error += "<br> Der Benutzername darf maximal 30 Zeichen lang sein!";
     }
 
-    if(error != ""){
-        res.redirect(`/register/${error}`)
+    if(error != ""){ // If there is an error
+        res.redirect(`/register/${error}`); // Redirect to register page with error message
     }else{
-        bcrypt.genSalt(10, function(err, salt) {
-            bcrypt.hash(password1, salt, function(err, hash){
+        bcrypt.genSalt(10, function(err, salt) { // Generate salt
+            bcrypt.hash(password1, salt, function(err, hash){ // Hash password
                 mysql_handler.createUser(username, email, hash, firstname, lastname, gender, street, housenumber, postcode, cityName, country);
-                 
-                res.redirect(`/login/`)             
-            })
-        })
+                res.redirect(`/login/`);        
+            });
+        });
     }
-})
+});
 
+// Login POST Request
 app.post("/auth/login", notAuthenticatedHandler, (req, res) =>{
+    // Get data from POST request
     let username = req.body.username;
     let password = req.body.password;
 
-    error = ""
+    error = "" // Error message
        
-    mysql_handler.con.query(`SELECT * FROM users WHERE username = "${username}"`, function(err, result){
-        if(err){
+    mysql_handler.con.query(`SELECT * FROM users WHERE username = "${username}"`, function(err, result){ // Get user from database
+        if(err){ // If there is an error
             error = "Login-Daten falsch!"
-        }else{
-            if(JSON.parse(JSON.stringify(result))[0]){
-                user = JSON.parse(JSON.stringify(result))[0]
-                dbPassword = user.password;
+        }else{ // If there is no error
+            result = JSON.parse(JSON.stringify(result))[0]; // Parse result from database
+            if(result){ // If there is a user
+                user = result; // Set user
+                dbPassword = user.password; // Get password from database
                 
-
-                bcrypt.compare(password, dbPassword, function(err, matched){
+                bcrypt.compare(password, dbPassword, function(err, matched){ // Compare password
                     if(err) console.log(err);
-                    if(matched){
-                        // login
+                    if(matched){ // If password matches
+                        // Set cookie
                         const token = jwt.sign({user:user.id}, SECRET_KEY)
                         res.cookie('authcookie', token, {maxAge: 90000000, httpOnly: true})
                         res.redirect(`/`)
@@ -289,18 +292,16 @@ app.post("/auth/login", notAuthenticatedHandler, (req, res) =>{
                         error = "Login-Daten falsch!"
                     }
                 })
-    
-                
             }else{
                 error = "Login-Daten falsch!"
             }
         }
-        if(error != ""){
+        if(error != ""){ // If there is an error
             res.redirect(`/login/${error}`)
         }
     });
 })
 
-app.listen(port, () =>{
+app.listen(port, () =>{ // Start server
     console.log("Listining to " + port)
 })

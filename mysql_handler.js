@@ -1,5 +1,4 @@
-let mysql = require('mysql')
-let connected = false;
+const mysql = require('mysql')
 
 // TODO check here for errors and do not let the db throw an error in order to give the user feedback 
 
@@ -9,114 +8,107 @@ con.query("SELECT * FROM users", function(err, result){
     } 
     console.log(result);
 });
-
 */
-let con = mysql.createConnection({
+
+let con = mysql.createConnection({ // TODO: change to config file
     host: "localhost",
     user: "onlineshop",
-    password: "TestUser321",
+    password: "TestUser321", // TODO: DO NOT STORE PASSWORDS IN THE CODE
     database: "onlineshop"
 });
 
-con.connect(function(err){
+con.connect(function(err){ // Connect to the database
     if(err) throw err;
     console.log("Connected to MySQL!");
-    connected = true
-    //createUser("dertyp", "address@email.com", "password", "Janis", "Meister", "Herr");
-    //createAddress("street", "1", "postcode", "city", "country", 18)
-    //createSeller("TEST", "test")
-    //createProduct("name", 1.2, "description", 2, 2, 1, 1)
-    //createReview("TESt", "Content", 6, 18, 1)
-    //createOrder(18, "tasddadse");
-    //createOrderProduct(1.5, 5, 1, 1)
 })
 
-function isConnected(){
-    if(connected){
-        return true;
-    }else{
-        console.log("not connected to mysql")
+function isConnected(){ 
+    // Check if database is connected
+    if(con.state === 'disconnected'){
         return false;
     }
+    return true;
 }
 
-function sendQuery(sql){
-    if(isConnected){
-        con.query(sql, function(err, result){
-            if(err){
-                console.log(err);
-                return false;
-            } 
-            return result;
-        });
-    }
-}
-
-// CREATES
-function createOrder(userId, trackingnumber, received, productId, quantity){
-    con.query(`INSERT INTO order_status(received, trackingnumber) VALUES (${received}, '${trackingnumber}')`, function(err, result){
+// Create Order database structure
+function createOrder(userId, trackingnumber, received, productId, quantity){ // TODO: add date
+     // create order status
+    con.query(`INSERT INTO order_status(received, trackingnumber) VALUES (${received}, '${trackingnumber}')`, (err, result) => {
         if(err) console.log(err);
 
-        con.query(`INSERT INTO orders(userId, order_statusId)
-        VALUES ((SELECT id FROM users WHERE id='${userId}'), (SELECT id FROM order_status WHERE trackingnumber='${trackingnumber}'))`, function(err, result){
+        // create order
+        con.query(`INSERT INTO orders(userId, order_statusId) VALUES ((SELECT id FROM users WHERE id='${userId}'),
+         (SELECT id FROM order_status WHERE trackingnumber='${trackingnumber}'))`, function(err, result){
             
+            // create order_product
             con.query(`SELECT orders.id FROM orders LEFT JOIN order_status ON orders.order_statusId=order_status.id WHERE order_status.trackingnumber='${order_trackingnumber}'`, function(err, result){
                 if(err) console.log(err);
-                order = JSON.parse(JSON.stringify(result))[0];
+                order = JSON.parse(JSON.stringify(result))[0]; // parse result to json
+                if(order != undefined){  // if order is not undefined
+                    con.query(`SELECT * FROM products WHERE id=${productId}`, (err, result) => { // get product
+                        if(err) console.log(err);
 
-                con.query(`SELECT * FROM products WHERE id=${productId}`, (err, result) => {
-                    if(err) console.log(err);
-                    product = JSON.parse(JSON.stringify(result))[0];
-                    
-                    con.query(`UPDATE products SET quantity=quantity-${quantity} WHERE id=${productId}`, (err, result) => {
-                        con.query(`INSERT INTO order_products(price, quantity, productId, orderId)
-                        VALUES ('${product.price}','${quantity}',
-                        (SELECT id FROM products WHERE id='${product.id}'), (SELECT id FROM orders WHERE id='${order.id}'))`, (err, result) => {
-                            if(err) console.log(err);
-                        })
-                    })
-                })
-            })
-
-        })
-
-    })    
+                        product = JSON.parse(JSON.stringify(result))[0]; // parse result to json
+                        
+                        // update old product quantity
+                        con.query(`UPDATE products SET quantity=quantity-${quantity} WHERE id=${productId}`, (err, result) => { 
+                            // create order_product
+                            con.query(`INSERT INTO order_products(price, quantity, productId, orderId)
+                            VALUES ('${product.price}','${quantity}',
+                            (SELECT id FROM products WHERE id='${product.id}'), (SELECT id FROM orders WHERE id='${order.id}'))`, (err, result) => {
+                                if(err) console.log(err);
+                            });
+                        });
+                    });
+                }
+            });
+        });
+    });    
 }
 
-function createReview(title, content, rating, userID, productId){
-    sendQuery(`INSERT INTO reviews(title, content, rating, userID, productId)
+// Create Review
+function createReview(title, content, rating, userID, productId){ // TODO: add date
+    con.query(`INSERT INTO reviews(title, content, rating, userID, productId)
     VALUES ('${title}','${content}','${rating}',
-    (SELECT id FROM users WHERE id='${userID}'), (SELECT id FROM products WHERE id='${productId}'))`);
-    
+    (SELECT id FROM users WHERE id='${userID}'), (SELECT id FROM products WHERE id='${productId}'))`, (err, result) => {
+        if(err) console.log(err);
+    });    
 }
 
+// Create Product
 function createProduct(name, price, description, quantity, delivery_time, sellerId, categoryId){
-    sendQuery(`INSERT INTO products(name, price, description, quantity, delivery_time, sellerId, categoryId)
-     VALUES ('${name}',${price},'${description}','${quantity}','${delivery_time}',
-    (SELECT id FROM sellers WHERE id='${sellerId}'), (SELECT id FROM categories WHERE id='${categoryId}'))`);
+    con.query(`INSERT INTO products(name, price, description, quantity, delivery_time, sellerId, categoryId)
+    VALUES ('${name}',${price},'${description}','${quantity}','${delivery_time}',
+   (SELECT id FROM sellers WHERE id='${sellerId}'), (SELECT id FROM categories WHERE id='${categoryId}'))`, (err, result) => {
+        if(err) console.log(err);
+    });
 }
 
-function createCategory(name){
-    sendQuery(`INSERT INTO categories(name) VALUES ('${name}')`); 
-}
-
-function createSeller(name, description){
-    sendQuery(`INSERT INTO sellers(name, description) VALUES ('${name}', '${description}')`); 
-}
-
-function createUser(username, email, password, firstname, lastname, gender, street, housenumber, postcode, cityName, country){  
-    con.query(`INSERT INTO users(username, email, password) VALUES ('${username}','${email}','${password}')`, function(err, result){
+// Create User database structure
+function createUser(username, email, password, firstname, lastname, gender, street, housenumber, postcode, cityName, country){ // TODO: Better error handling if something goes wrong in progress
+    // Create User
+    con.query(`INSERT INTO users(username, email, password) VALUES ('${username}','${email}','${password}')`, (err, result) =>{
         if(err){
             console.log(err);
         }else if(result){
-            sendQuery(`INSERT INTO userinfos(firstname, lastname, gender, userId) VALUES ('${firstname}','${lastname}','${gender}',
-            (SELECT id FROM users WHERE username='${username}' AND email='${email}'))`);
-            console.log(`User created: ${username}!`)
-    
-            sendQuery(`INSERT INTO cities(name, postcode) VALUES ('${cityName}', '${postcode}')`);
-    
-            sendQuery(`INSERT INTO addresses(street, housenumber, country, userId, cityId) VALUES ('${street}','${housenumber}','${country}',
-            (SELECT id FROM users WHERE username='${username}'), (SELECT id FROM cities WHERE name='${cityName}' AND postcode='${postcode}'))`);
+            // Create User Info
+            con.query(`INSERT INTO userinfos(firstname, lastname, gender, userId) VALUES ('${firstname}','${lastname}','${gender}',
+            (SELECT id FROM users WHERE username='${username}' AND email='${email}'))`, (err, result) => {
+                if(err) console.log(err);
+            });
+            
+            // Create City
+            con.query(`INSERT INTO cities(name, postcode) VALUES ('${cityName}', '${postcode}')`, (err, result) => {
+                if(err) console.log(err);
+            });
+            
+            // Create Address
+            con.query(`INSERT INTO addresses(street, housenumber, country, userId, cityId) VALUES ('${street}','${housenumber}','${country}',
+            (SELECT id FROM users WHERE username='${username}'), (SELECT id FROM cities WHERE name='${cityName}' AND postcode='${postcode}'))`, (err, result) => { 
+                if(err) console.log(err);
+            });
+            
+            console.log(`User created: ${username}!`);
         }
     });
 }
@@ -124,6 +116,6 @@ function createUser(username, email, password, firstname, lastname, gender, stre
 
 
 module.exports = {
-    sendQuery, createOrder, createReview,
-    createProduct, createCategory, createSeller, createUser, con
+    createOrder, createReview, isConnected,
+    createProduct, createUser, con
 }
