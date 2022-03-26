@@ -9,14 +9,75 @@ form{
     width: 500px;
 }
 
-form input{
+form label{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
     width: 80%;
+    margin-top: 20px;
+}
+
+form label p{
+    width: 100%;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+form label input{
+    width: 100%;
     display:block;
     margin-left: auto;
     margin-right: auto;
     height: 35px;
     border-radius: 5px;
-    border: 2px solid rgb(0, 155, 194);
+    border: 2px solid rgb(0, 99, 156);
     background-color: rgb(255, 255, 255);
+    transition: 0.1s;
+    transition-timing-function: linear;
+    outline: none !important;
+}
+
+form h4{
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 0px;
+}
+/* Submit button with blue background horizontal center*/
+form input[type="submit"]{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    width: 100%;
+    display:block;
     margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 99, 156);
+    background-color: rgb(0, 99, 156);
+    transition: 0.1s;
+    transition-timing-function: linear;
+    outline: none !important;
+    cursor:pointer;
+}
+
+
+/* Hover */
+
+form label input:hover{
+    border: 2px solid rgb(1, 197, 246);
+}
+
+form label input:focus{
+    border: 2px solid rgb(1, 197, 246);
+    box-shadow: 0 0 5px #719ece62;
+}
+
+form input[type="submit"]:hover{
+    border: 2px solid rgb(7, 130, 200);
+    background-color: rgb(7, 130, 200);
 }

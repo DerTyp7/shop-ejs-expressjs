@@ -1,3 +1,31 @@
 *{
     font-family: Arial, Helvetica, sans-serif;
 }
+
+h1{
+    text-align: center;
+}
+
+#error-text{
+    color: red;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    display:block;
+    text-align: center;
+}
+
+.text-redirect{
+    color: rgb(0, 99, 156);
+    font-size: 0.8em;
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding-top: 10px;
+}

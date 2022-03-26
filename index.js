@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser")
 const jwt = require("jsonwebtoken")
 const bodyParser = require("body-parser")
 const app = express()
+const uuid = require("uuid");
 const port = 3000
 
 const SECRET_KEY = "KEY"
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true}));
 app.use(cookieParser());
 app.use(bodyParser.json())
 app.use(express.static(__dirname + "/static"));
+
 /*
 const authcookie = req.cookies.authcookie;
 
@@ -31,7 +33,7 @@ jwt.verify(authcookie, SECRET_KEY, (err, data) =>{
 })
 */
 
-function authenticateHandler(req, res, next){
+function authenticatedHandler(req, res, next){
     const authcookie = req.cookies.authcookie;
 
     jwt.verify(authcookie, SECRET_KEY, (err, data) =>{
@@ -55,7 +57,21 @@ function authenticateHandler(req, res, next){
     })
 }
 
-app.get("/", authenticateHandler, (req, res) => {
+function notAuthenticatedHandler(req, res, next){
+    const authcookie = req.cookies.authcookie;
+
+    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{
+        if(err){
+            console.log(err)
+            next(); 
+        } else if(data.user){
+            res.redirect("/")
+                      
+        }
+    })
+}
+
+app.get("/", authenticatedHandler, (req, res) => {
     let dict = {
         title: "Hallo",
         isAdmin: req.isAdmin
@@ -121,8 +137,61 @@ app.get("/search", (req, res) => {
         res.render('search', dict)
     });
 })
+
+// Order
+app.get("/order/:productId/:quantity/", authenticatedHandler, (req, res) => {
+
+    let error = ""
+    mysql_handler.con.query(`SELECT * FROM products WHERE id=${req.params.productId}`, function(err, result){
+        if(err) throw err;       
+        result = JSON.parse(JSON.stringify(result))[0];
+
+        if(req.params.quantity > result.quantity){
+            error = "Nicht genug Produkte vorhanden"
+        }
+
+        let dict = {
+            title: "Bestellung",
+            error: error,
+            product: result,
+            quantity: req.params.quantity
+        }
+
+        res.render('order', dict)
+    });   
+})
+
+app.get("/order_success/:trackingnumber", authenticatedHandler, (req, res) => {
+    let dict = {
+        title: "Bestellung erfolgreich",
+        trackingnumber: req.params.trackingnumber
+    }
+
+    res.render('order_success', dict)
+})
+app.post("/order", authenticatedHandler, (req, res) => {
+    let productId = req.body.productId;
+    let quantity = req.body.quantity;
+    let userId = req.user;
+
+    mysql_handler.con.query(`SELECT * FROM products WHERE id=${productId}`, function(err, result){
+        if(err) throw err;       
+        result = JSON.parse(JSON.stringify(result))[0];
+
+        if(quantity > result.quantity){
+            res.redirect(`/order/${productId}/${quantity}/`)
+        }else{
+            order_trackingnumber = uuid.v4()
+            mysql_handler.createOrder(userId, order_trackingnumber, 0, productId, quantity)    
+    
+            res.redirect("/order_success/" + order_trackingnumber)
+        }        
+    });
+})
+
+
 // Admin
-app.get("/admin/product/delete/:productId", authenticateHandler, (req, res) => {
+app.get("/admin/product/delete/:productId", authenticatedHandler, (req, res) => {
     if(req.isAdmin){
         productId = req.params.productId
         mysql_handler.con.query(`DELETE FROM products WHERE id=${productId}`, function(err, result){
@@ -131,30 +200,13 @@ app.get("/admin/product/delete/:productId", authenticateHandler, (req, res) => {
     }
 })
 
-
 // AUTH
-app.get("/logout/", authenticateHandler, (req, res) => {
+app.get("/logout/", authenticatedHandler, (req, res) => {
     res.clearCookie("authcookie")
-    res.end()
+    res.redirect("/")
 })
 
-app.get("/register/", (req, res) => {
-    let dict = {
-        title: "Register",
-        error: ""
-    }
-    res.render('register', dict)    
-})
-
-app.get("/login/", (req, res) => {
-    let dict = {
-        title: "Login",
-        error: ""
-    }
-    res.render('login', dict)    
-})
-
-app.get("/register/:error", (req, res) => {
+app.get("/register/:error?", notAuthenticatedHandler, (req, res) => {
     let dict = {
         title: "Register",
         error: req.params.error
@@ -162,7 +214,7 @@ app.get("/register/:error", (req, res) => {
     res.render('register', dict)    
 })
 
-app.get("/login/:error", (req, res) => {
+app.get("/login/:error?", notAuthenticatedHandler, (req, res) => {
     let dict = {
         title: "Login",
         error: req.params.error
@@ -171,7 +223,7 @@ app.get("/login/:error", (req, res) => {
     res.render('login', dict)    
 })
 
-app.post("/auth/register", (req, res) =>{
+app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
     let username = req.body.username;
     let email = req.body.email;
     let password1 = req.body.password1;
@@ -179,6 +231,11 @@ app.post("/auth/register", (req, res) =>{
     let firstname = req.body.firstname;
     let lastname = req.body.lastname;
     let gender = req.body.gender;
+    let street = req.body.street;
+    let housenumber = req.body.housenumber;
+    let postcode = req.body.postcode;
+    let cityName = req.body.cityName;
+    let country = req.body.country;
 
     error = ""
 
@@ -198,14 +255,15 @@ app.post("/auth/register", (req, res) =>{
     }else{
         bcrypt.genSalt(10, function(err, salt) {
             bcrypt.hash(password1, salt, function(err, hash){
-                mysql_handler.createUser(username, email, hash, firstname, lastname, gender);
-                res.redirect(`/login/`)
+                mysql_handler.createUser(username, email, hash, firstname, lastname, gender, street, housenumber, postcode, cityName, country);
+                 
+                res.redirect(`/login/`)             
             })
         })
     }
 })
 
-app.post("/auth/login", (req, res) =>{
+app.post("/auth/login", notAuthenticatedHandler, (req, res) =>{
     let username = req.body.username;
     let password = req.body.password;
 
@@ -225,7 +283,7 @@ app.post("/auth/login", (req, res) =>{
                     if(matched){
                         // login
                         const token = jwt.sign({user:user.id}, SECRET_KEY)
-                        res.cookie('authcookie', token, {maxAge: 900000, httpOnly: true})
+                        res.cookie('authcookie', token, {maxAge: 90000000, httpOnly: true})
                         res.redirect(`/`)
                     }else{
                         error = "Login-Daten falsch!"
@@ -237,11 +295,10 @@ app.post("/auth/login", (req, res) =>{
                 error = "Login-Daten falsch!"
             }
         }
+        if(error != ""){
+            res.redirect(`/login/${error}`)
+        }
     });
-        
-    if(error != ""){
-        res.redirect(`/login/${error}`)
-    }
 })
 
 app.listen(port, () =>{

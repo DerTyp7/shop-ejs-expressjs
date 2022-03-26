@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head'); %>
+    <link rel="stylesheet" href="/order.css">
+</head>
+<body>
+    <h1>Ihre Bestellung</h1>
+    <p id="error-text"><%- error %></p>
+
+    <div id="order-info">
+        <p><b>Produktname:</b> <%= product.name %></p>
+        <p><b>Stückpreis:</b> <%= product.price %> €</p>
+        <p><b>Anzahl: </b><%= quantity %></p>
+        <hr>
+        <p><b>Gesamtpreis:</b> <%= quantity * product.price %> €</p>
+    </div>
+
+    <!--submit button-->
+    <form action="/order" method="POST">
+        <input type="text" name="productId" value="<%= product.id %>">
+        <input type="text" name="quantity" value="<%= quantity %>">
+        <!-- Price is calculated on backend ;) -->
+
+        <input type="submit" value="Bestellen">
+    </form>
+</body>
+</html>

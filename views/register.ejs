@@ -8,17 +8,75 @@
     <h1>Register</h1>
 
     <form action="/auth/register" method="POST">
-        <p style="text-align:center;"><%- error %></p>
+        <p id="error-text"><%- error %></p>
 
-        <input required type="text" name="username" id="usernameInput" placeholder="Enter your username">
-        <input required type="email" name="email" id="emailInput" placeholder="Enter your E-Mail">
-        <input required type="password" name="password1" id="password1Input" placeholder="Enter your password">
-        <input required type="password" name="password2" id="password2Input" placeholder="Repeat your password">
-        <input required type="text" name="firstname" id="firstnameInput" placeholder="Enter your firstname">
-        <input required type="text" name="lastname" id="lastnameInput" placeholder="Enter your lastname">
-        <input required type="text" name="gender" id="genderInput" placeholder="How should we call you?">
+        <h4>Account Informationen:</h4>
 
-        <input style="width: 40%;cursor:pointer;" type="submit" value="Register">
+        <label for="username">
+            <p>Benutzername:</p>
+            <input required type="text" name="username" id="usernameInput" placeholder="Geben Sie Ihren Benutzernamen ein">
+        </label>
+        
+        <label for="email">
+            <p>E-Mail:</p>
+            <input required type="email" name="email" id="emailInput" placeholder="Geben Sie Ihre E-Mail-Adresse ein">
+        </label>
+
+        <label for="password1">
+            <p>Passwort:</p>
+            <input required type="password" name="password1" id="password1Input" placeholder="Geben Sie Ihr Passwort ein">
+        </label>
+
+        <label for="password2">
+            <p>Passwort wiederholen:</p>
+            <input required type="password" name="password2" id="password2Input" placeholder="wiederholen Sie Ihr Passwort">
+        </label>
+
+        <h4>Persönliche Informationen:</h4>
+        <label for="firstname">
+            <p>Vorname:</p>
+            <input required type="text" name="firstname" id="firstnameInput" placeholder="Geben Sie Ihren Vornamen ein">
+        </label>
+
+        <label for="lastname">
+            <p>Nachname:</p>
+            <input required type="text" name="lastname" id="lastnameInput" placeholder="Geben Sie Ihren Nachnamen ein">
+        </label>
+
+        <label for="gender">
+            <p>Anrede (z.B. Herr, Frau):</p>
+            <input required type="text" name="gender" id="genderInput" placeholder="Wie lautet Ihre Anrede?">
+        </label>        
+
+        <h4>Lieferadresse:</h4>
+        <label for="street">
+            <p>Straße:</p>
+            <input required type="text" name="street" id="streetInput" placeholder="Geben Sie Ihre Straße ein">
+        </label>
+
+        <label for="housenumber">
+            <p>Hausnummer:</p>
+            <input required type="number" min="1" name="housenumber" id="housenumberInput" placeholder="Geben Sie Ihre Hausnummer ein">
+        </label>
+
+        <label for="postcode">
+            <p>Postleitzahl:</p>
+            <input required type="text" name="postcode" id="postcodeInput" placeholder="Geben Sie die Postleitzahl ein">
+        </label>
+
+        <label for="cityName">
+            <p>Stadt:</p>
+            <input required type="text"  name="cityName" id="cityInput" placeholder="Geben Sie die Stadt ein">
+        </label>
+
+        <label for="country">
+            <p>Land:</p>
+            <input required type="text" name="country" id="countryInput" placeholder="Geben Sie das Land ein">
+        </label>
+
+        <input style="width: 40%;cursor:pointer;" type="submit" value="Registrieren">
+        <!-- Already have an account?-->
+        <a class="text-redirect" href="/login">Sie haben bereits einen Account?</a>
     </form>
 </body>
 </html>
