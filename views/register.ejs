@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head'); %>
+    <link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+    <h1>Register</h1>
+
+    <form action="/auth/register" method="POST">
+        <p style="text-align:center;"><%- error %></p>
+
+        <input required type="text" name="username" id="usernameInput" placeholder="Enter your username">
+        <input required type="email" name="email" id="emailInput" placeholder="Enter your E-Mail">
+        <input required type="password" name="password1" id="password1Input" placeholder="Enter your password">
+        <input required type="password" name="password2" id="password2Input" placeholder="Repeat your password">
+        <input required type="text" name="firstname" id="firstnameInput" placeholder="Enter your firstname">
+        <input required type="text" name="lastname" id="lastnameInput" placeholder="Enter your lastname">
+        <input required type="text" name="gender" id="genderInput" placeholder="How should we call you?">
+
+        <input style="width: 40%;cursor:pointer;" type="submit" value="Register">
+    </form>
+</body>
+</html>

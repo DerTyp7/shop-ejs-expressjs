@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head'); %>
+    <link rel="stylesheet" href="/auth.css">
+</head>
+<body>
+    <h1>Login</h1>
+
+    <form action="/auth/login" method="POST">
+        <p style="text-align:center;"><%- error %></p>
+
+        <input required type="text" name="username" id="usernameInput" placeholder="Enter your username">
+        <input required type="password" name="password" id="passwordInput" placeholder="Enter your password">
+
+        <input style="width: 40%;cursor:pointer;" type="submit" value="Login">
+    </form>
+</body>
+</html>

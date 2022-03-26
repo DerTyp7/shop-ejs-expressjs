@@ -1,0 +1,22 @@
+h1{
+    text-align: center;
+}
+
+form{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+form input{
+    width: 80%;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 155, 194);
+    background-color: rgb(255, 255, 255);
+    margin-top: 20px;
+}
