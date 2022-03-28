@@ -18,8 +18,8 @@
 
     <!--submit button-->
     <form action="/order" method="POST">
-        <input type="text" name="productId" value="<%= product.id %>">
-        <input type="text" name="quantity" value="<%= quantity %>">
+        <input hidden type="text" name="productId" value="<%= product.id %>">
+        <input hidden type="text" name="quantity" value="<%= quantity %>">
         <!-- Price is calculated on backend ;) -->
 
         <input type="submit" value="Bestellen">
