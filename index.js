@@ -23,6 +23,32 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + "/static"));
 
 // Authentication Handlers
+
+// Check if user is authenticated and NO redirect
+function authNoRedirectHandler(req, res, next){
+    const authcookie = req.cookies.authcookie; // Get authcookie from cookie
+
+    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{  // Verify authcookie
+        if(err){ // If authcookie is invalid
+            console.log(err);
+            next();
+        } else if(data.user){ // If authcookie is valid
+            req.user = data.user; // Set user to data.user
+            mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
+                if(err) console.log(err);
+                let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
+                // Set user to req.user
+                req.isAdmin = user.isAdmin;
+                req.username = user.username;
+                req.firstname = user.firstname;
+                req.lastname = user.lastname;
+                next(); // Continue to next handler
+            });
+        }
+    });
+}
+
+
 // Check if user is authenticated and redirect to login if not
 function authenticatedHandler(req, res, next){
     const authcookie = req.cookies.authcookie; // Get authcookie from cookie
@@ -62,30 +88,68 @@ function notAuthenticatedHandler(req, res, next){
 }
 
 // Homepage
-app.get("/", authenticatedHandler, (req, res) => { 
-    let dict = {
-        title: "Hallo",
-        isAdmin: req.isAdmin
-    }
+app.get("/", authNoRedirectHandler, (req, res) => { 
+    mysql_handler.con.query("SELECT * FROM products", function(err, result){
+        if(err) throw err;
 
-    res.render('index', dict)
+        let dict = {
+            title: "Startseite",
+            user: req.user,
+            products: JSON.parse(JSON.stringify(result))
+        }
+        res.render('index', dict)
+    });
 });
 
 // Product Page
 app.get("/product/:productId", (req, res) => {
     let productId = req.params.productId;
-    console.log(productId);
     
-    mysql_handler.con.query(`SELECT * FROM products WHERE id=${productId}` , function(err, result){
+    mysql_handler.con.query(`SELECT s.name AS sellerName, p.name AS productName, p.description AS productDescription, p.id AS id, price,quantity, delivery_time, p.categoryId
+     FROM products AS p LEFT JOIN  sellers AS s ON p.sellerId= s.id WHERE p.id=${productId}` , function(err, result){
         if(err) throw err;
 
         let product = JSON.parse(JSON.stringify(result))[0];
-        let dict = {
-            title: "product",
-            product: product
-        }
-        res.render('product', dict)
+        
+        mysql_handler.con.query(`SELECT title, content ,rating, u.username AS name FROM reviews AS r LEFT JOIN users AS u ON r.userId = u.id WHERE productId=${productId}`,function(err,result){
+            if(err) throw err;
+            let reviews = JSON.parse(JSON.stringify(result));
+            console.log(product)
+            mysql_handler.con.query(`SELECT * FROM categories WHERE id='${product.categoryId}'`,function(err,result){
+                if(err) throw err;
+                let category = JSON.parse(JSON.stringify(result))[0];
+
+                let dict = {
+                    title: product.productName,
+                    product: product,
+                    shippingDays: 3,
+                    stockAmount: 50,
+                    productDescription: "ez",
+                    loggedIn: true,
+                    reviews: reviews,
+                    category: category,                    
+                }
+                res.render('product', dict)
+            });
+        });
+        
     });
+});
+
+// Reviews
+app.post("/review/create/:productId", authenticatedHandler,(req, res) => {
+    let productId = req.params.productId;
+    let rating = req.body.rating;
+    let title = req.body.title;
+    let content = req.body.content;
+    
+
+    mysql_handler.con.query(`INSERT INTO reviews(title, content, rating, userId, productId)
+     VALUES('${title}', '${content}', '${rating}', (SELECT id FROM users WHERE id = ${req.user}), (SELECT id FROM products WHERE id = ${productId}))`, (err, result) => {
+        if(err) throw err;
+        res.redirect("/product/" + productId);
+    });
+
 });
 
 // Search Page
@@ -304,4 +368,4 @@ app.post("/auth/login", notAuthenticatedHandler, (req, res) =>{
 
 app.listen(port, () =>{ // Start server
     console.log("Listining to " + port)
-})
+});

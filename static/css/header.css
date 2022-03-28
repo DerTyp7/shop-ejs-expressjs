@@ -1,0 +1,92 @@
+/* UTIL */
+ .vertical-center {
+    float: left;
+    top: 50%;
+    position: relative;
+    transform: translateY(-50%);
+}
+
+body {
+    margin: 0;
+}
+
+/* BACKGROUND */
+.headerDIV > div {
+    height: 100%;
+    text-align: center;
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* LOGO PART */
+.headerDIVLogo {
+    width: 20%;
+}
+.headerDIVLogo > img {
+    float: left;
+    height: 80%;
+    position: relative;
+    top: 10%;
+}
+
+/* SEARCH PART */
+.headerDIVSearch {
+    width: 60%;
+}
+.headerDIVSearch > input {
+    left: 10%;
+    width: calc(80% - 60px);
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    height: 20px;
+    padding: 3px 10px;
+}
+.headerDIVSearch > button {
+    width: 40px;
+    left: 10%;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    height: 30px;
+}
+
+/* BUTTON PART */
+.headerDIVButton {
+    width: 20%;
+}
+.headerDIVButton > button {
+    height: 30px;
+    float: right;
+    margin-right: 10px;
+    height: 35px;
+    border-radius: 5px;
+    border: 3px solid rgb(6, 70, 107);
+    background-color: rgb(0, 99, 156);
+    transition: 0.1s;
+    transition-timing-function: linear;
+    cursor: pointer;
+    color:white;
+    font-weight: bold;
+}
+
+#headerBtnLogout{
+    background-color: rgb(172, 38, 38);
+    border-color: rgb(145, 35, 35);
+}
+
+#headerBtnLogout:hover{
+    background-color: rgb(206, 50, 50);
+}
+
+
+.headerDIVButton > button:hover {
+    background-color: rgb(23, 114, 167);
+}
+
+.headerDIV {
+    width: 100%;
+    height: 65px;
+    background-color: #414854;
+    margin: 0;
+}

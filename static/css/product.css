@@ -1,0 +1,238 @@
+*{
+    padding:0;
+}
+
+h1, h2{
+    margin-left: 0px;
+    text-align: left;
+    padding-bottom: 0;
+    margin-bottom: 0px;
+}
+
+.seller{
+    display: block;
+    height: 30px;
+    margin-top:10px;
+    padding: 0;
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+.badge{
+    background-color: rgb(224, 224, 224);
+    color: black;
+    height: 15px;
+    padding-left: 3px;
+    padding-right: 3px;
+    font-size: 9pt;
+    display: block;
+    margin-top: -5;
+    border-radius: 5px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: -10px;
+    border: 2px solid rgb(143, 143, 143);
+    float:left;
+}
+#content
+{
+    width: 1000px;
+    height:3000px;  
+    background-color: rgb(244, 244, 244);
+    margin:auto;
+    padding-top: 10px;
+}
+#productPicture
+{
+    width: 40%;
+    height: 400px;
+    /*background-color: rgb(85, 85, 85);*/
+    display: block;
+    float: left;
+    border-bottom: 2px solid rgb(104, 117, 151);
+}
+
+#productPicture img
+{
+    width: 90%;
+    display: block;
+}
+#info
+{
+    width: 60%;
+    height: 400px;
+    display: block;
+    float: right;
+    /*background-color: rgb(121, 170, 182);*/
+    border-bottom: 2px solid rgb(104, 117, 151);;
+}
+
+.order-button{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display:block;
+    float:left;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 99, 156);
+    background-color: rgb(0, 99, 156);
+    transition: 0.1s;
+    transition-timing-function: linear;
+    outline: none !important;
+    cursor:pointer;
+    margin-right: 30px;
+    margin-top: 10px;
+}
+
+#description
+{
+    width: 100%;
+    display: block;
+    float: left;
+    background-color: rgba(103, 187, 183, 0);
+    border-bottom: 2px solid rgb(104, 117, 151);
+}
+
+#description p,h2 {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+#newReview{
+    width: 100%;
+    display: block;
+    float: left;
+    background-color: rgba(45, 66, 94, 0);
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgb(104, 117, 151);;
+}
+#reviews{
+    width: 100%;
+    height: 1600px;
+    display: block;
+    float: left;
+    background-color: rgba(39, 39, 39, 0);
+
+}
+#reviewTemplate
+{
+    width: 100%;
+    float: left;
+    margin-bottom: 20px;
+}
+#reviewTemplatePicture
+{
+    width: 200px;
+    height: 200px;
+    display: block;
+    float: left;
+    background-color: rgb(85, 158, 255);
+}
+
+
+#data
+{
+    width: 100%;
+    height: 50px;
+    display: block;
+    float: left;
+    background-color: rgb(124, 142, 212);
+    
+}
+#text
+{
+    width: 100%;
+    height: 150px;
+    display: block;
+    float: left;
+    background-color: rgb(211, 196, 247);
+}
+#reviewTemplateText
+{
+    background-color: rgb(235, 196, 228);
+}
+
+form{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+form label{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    margin-top: 20px;
+}
+
+form label p{
+    width: 100%;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+}
+form label input{
+    width: 100%;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 99, 156);
+    background-color: rgb(255, 255, 255);
+    transition: 0.1s;
+    transition-timing-function: linear;
+    outline: none !important;
+}
+/* Submit button with blue background horizontal center*/
+form input[type="submit"]{
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    width: 100%;
+    display:block;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 35px;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 99, 156);
+    background-color: rgb(0, 99, 156);
+    transition: 0.1s;
+    transition-timing-function: linear;
+    outline: none !important;
+    cursor:pointer;
+}
+
+
+/* Hover */
+
+form label input:hover{
+    border: 2px solid rgb(1, 197, 246);
+}
+
+form label input:focus{
+    border: 2px solid rgb(1, 197, 246);
+    box-shadow: 0 0 5px #719ece62;
+}
+
+form input[type="submit"]:hover{
+    border: 2px solid rgb(7, 130, 200);
+    background-color: rgb(7, 130, 200);
+}
+
+textarea{
+    resize: vertical;
+    width: 100%;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+}

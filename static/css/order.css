@@ -3,7 +3,14 @@
     margin-left: auto;
     margin-right: auto;
     width: 500px;
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
+
+#order-info p{
+    height: 30px;
+}
+
 
 form input[type="submit"]{
     color: rgb(255, 255, 255);
@@ -27,4 +34,13 @@ form input[type="submit"]{
 
 h3{
     text-align: center;
+}
+
+hr{
+    width: 100%;
+    border: 0px;
+    background-color:rgba(51, 51, 51, 0.337);
+    height: 2px;
+    margin-top: 20px;
+    margin-bottom: 20px;    
 }

@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <%- include('partials/head'); %>
-    <link rel="stylesheet" href="/order.css">
+    <link rel="stylesheet" href="/css/order.css">
 </head>
 <body>
+    <%- include('partials/header'); %>
     <h1>Ihre Bestellung</h1>
     <p id="error-text"><%- error %></p>
 
@@ -19,10 +20,12 @@
     <!--submit button-->
     <form action="/order" method="POST">
         <input hidden type="text" name="productId" value="<%= product.id %>">
-        <input hidden type="text" name="quantity" value="<%= quantity %>">
+        <input hidden   type="text" name="quantity" value="<%= quantity %>">
         <!-- Price is calculated on backend ;) -->
 
         <input type="submit" value="Bestellen">
     </form>
+
 </body>
+
 </html>
