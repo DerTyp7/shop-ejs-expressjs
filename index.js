@@ -37,11 +37,14 @@ function authNoRedirectHandler(req, res, next){
             mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
                 if(err) console.log(err);
                 let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
-                // Set user to req.user
-                req.isAdmin = user.isAdmin;
-                req.username = user.username;
-                req.firstname = user.firstname;
-                req.lastname = user.lastname;
+                if(user.id){
+                    // Set user to req.user
+                    req.isAdmin = user.isAdmin;
+                    req.username = user.username;
+                    req.firstname = user.firstname;
+                    req.lastname = user.lastname;
+                }
+               
                 next(); // Continue to next handler
             });
         }
@@ -59,7 +62,7 @@ function authenticatedHandler(req, res, next){
             res.redirect("/login");
         } else if(data.user){ // If authcookie is valid
             req.user = data.user; // Set user to data.user
-            mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
+            mysql_handler.con.query(`SELECT * FROM users LEFT JOIN userinfos ON users.id=userinfos.userId WHERE users.id = "${req.user}"`, (err, result) => { // Get user from database
                 if(err) console.log(err);
                 let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
                 // Set user to req.user
@@ -91,7 +94,7 @@ function notAuthenticatedHandler(req, res, next){
 app.get("/", authNoRedirectHandler, (req, res) => { 
     mysql_handler.con.query("SELECT * FROM products", function(err, result){
         if(err) throw err;
-
+        
         let dict = {
             title: "Startseite",
             user: req.user,
@@ -100,6 +103,21 @@ app.get("/", authNoRedirectHandler, (req, res) => {
         res.render('index', dict)
     });
 });
+
+// Account
+app.get("/account", authenticatedHandler, (req, res) => { 
+    let dict = {
+        title: "Account",
+        user: req.user,
+        isAdmin: req.isAdmin,
+        username: req.username,
+        firstname: req.firstname,
+        lastname: req.lastname
+    }
+    res.render('account', dict)
+
+});
+
 
 // Product Page
 app.get("/product/:productId", (req, res) => {

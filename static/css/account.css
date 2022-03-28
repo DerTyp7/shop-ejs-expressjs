@@ -1,0 +1,29 @@
+#account-info{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    border-bottom: 2px solid rgb(104, 117, 151);;
+}
+
+#account-info p{
+    height: 30px;
+}
+
+h4{
+    text-align: left;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#order-info{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    border-bottom: 2px solid rgb(104, 117, 151);;
+}

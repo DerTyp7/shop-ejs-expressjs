@@ -67,6 +67,8 @@ body {
     transition-timing-function: linear;
     cursor: pointer;
     color:white;
+    padding-left: 5px;
+    padding-right: 5px;
     font-weight: bold;
 }
 

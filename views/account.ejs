@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head'); %>
+    <link rel="stylesheet" href="/css/account.css">
+</head>
+<body>
+    <%- include('partials/header'); %>
+    <h1>Ihr Konto</h1>
+    <div id="account-info">
+        <h3>Persönliche Informationen</h3>
+        <p><b>Vorname:</b> <%= firstname %></p>
+        <p><b>Nachname:</b> <%= lastname %></p>
+        <p><b>Benutzername: </b><%= username %></p>
+    </div>
+
+    <div id="order-info">
+        <h3>Ihre Bestellungen</h3>
+    </div>
+</body>
+
+</html>
