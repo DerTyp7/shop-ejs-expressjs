@@ -43,6 +43,7 @@ function authNoRedirectHandler(req, res, next){
                     req.username = user.username;
                     req.firstname = user.firstname;
                     req.lastname = user.lastname;
+                    req.email = user.email;
                 }
                
                 next(); // Continue to next handler
@@ -70,6 +71,7 @@ function authenticatedHandler(req, res, next){
                 req.username = user.username;
                 req.firstname = user.firstname;
                 req.lastname = user.lastname;
+                req.email = user.email;
                 next(); // Continue to next handler
             });
         }
@@ -106,21 +108,27 @@ app.get("/", authNoRedirectHandler, (req, res) => {
 
 // Account
 app.get("/account", authenticatedHandler, (req, res) => { 
-    let dict = {
-        title: "Account",
-        user: req.user,
-        isAdmin: req.isAdmin,
-        username: req.username,
-        firstname: req.firstname,
-        lastname: req.lastname
-    }
-    res.render('account', dict)
-
+    mysql_handler.con.query(`SELECT orders.id, products.name, order_products.quantity, order_products.price
+    FROM orders LEFT JOIN order_products ON orders.id=order_products.orderId
+    LEFT JOIN products ON order_products.productId=products.id WHERE orders.userId = '${req.user}' ORDER BY orders.id DESC`, (err, result) => {
+        if(err) console.log(err);
+        let dict = {
+            title: "Account",
+            user: req.user,
+            isAdmin: req.isAdmin,
+            username: req.username,
+            firstname: req.firstname,
+            lastname: req.lastname,
+            email: req.email,
+            orders: JSON.parse(JSON.stringify(result))
+        }
+        res.render('account', dict)
+    })
 });
 
 
 // Product Page
-app.get("/product/:productId", (req, res) => {
+app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
     let productId = req.params.productId;
     
     mysql_handler.con.query(`SELECT s.name AS sellerName, p.name AS productName, p.description AS productDescription, p.id AS id, price,quantity, delivery_time, p.categoryId
@@ -145,7 +153,8 @@ app.get("/product/:productId", (req, res) => {
                     productDescription: "ez",
                     loggedIn: true,
                     reviews: reviews,
-                    category: category,                    
+                    category: category, 
+                    user: req.user,                   
                 }
                 res.render('product', dict)
             });
@@ -171,7 +180,7 @@ app.post("/review/create/:productId", authenticatedHandler,(req, res) => {
 });
 
 // Search Page
-app.get("/search", (req, res) => {
+app.get("/search", authNoRedirectHandler,(req, res) => {
     var products = [
         {
             title: "Panasonic LUMIX DC-GH5M2ME",
@@ -201,7 +210,8 @@ app.get("/search", (req, res) => {
 
     let dict = {
         title: "Suche",
-        products: products
+        products: products,
+        user: req.user,
     }
 
     mysql_handler.con.query("SELECT * FROM products", function(err, result){
@@ -230,7 +240,8 @@ app.get("/order/:productId/:quantity/", authenticatedHandler, (req, res) => {
             title: "Bestellung",
             error: error,
             product: result,
-            quantity: req.params.quantity
+            quantity: req.params.quantity,
+            user: req.user,     
         }
 
         res.render('order', dict);

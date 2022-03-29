@@ -2,7 +2,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 500px;
+    width: 600px;
     margin-top: 60px;
     margin-bottom: 60px;
     border-bottom: 2px solid rgb(104, 117, 151);;
@@ -22,8 +22,22 @@ h4{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 500px;
+    width: 600px;
     margin-top: 60px;
     margin-bottom: 60px;
     border-bottom: 2px solid rgb(104, 117, 151);;
+}
+
+#order-info table{
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid rgb(104, 117, 151);
+    text-align: center;
+    border:0;
+}
+
+#order-info table tr{
+    height: 50px;
+    border-bottom: 1px solid grey;
 }
