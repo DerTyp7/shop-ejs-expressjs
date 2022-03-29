@@ -58,7 +58,7 @@ CREATE TABLE `categories` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +67,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (3,'Bauwaren'),(1,'Elektrowaren'),(4,'Television');
+INSERT INTO `categories` VALUES (3,'Bauwaren'),(1,'Elektrowaren'),(6,'Lebensmittel'),(5,'Technik'),(4,'Television');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,7 +83,7 @@ CREATE TABLE `cities` (
   `name` varchar(60) NOT NULL,
   `postcode` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -92,7 +92,7 @@ CREATE TABLE `cities` (
 
 LOCK TABLES `cities` WRITE;
 /*!40000 ALTER TABLE `cities` DISABLE KEYS */;
-INSERT INTO `cities` VALUES (1,'Bremerhaven','27574'),(2,'Bremerhaven','27574');
+INSERT INTO `cities` VALUES (1,'Bremerhaven','27574'),(2,'Bremerhaven','27574'),(3,'Bremerhaven','27574');
 /*!40000 ALTER TABLE `cities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +114,7 @@ CREATE TABLE `order_products` (
   KEY `orderId` (`orderId`),
   CONSTRAINT `order_products_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `order_products_ibfk_2` FOREIGN KEY (`orderId`) REFERENCES `orders` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +123,7 @@ CREATE TABLE `order_products` (
 
 LOCK TABLES `order_products` WRITE;
 /*!40000 ALTER TABLE `order_products` DISABLE KEYS */;
-INSERT INTO `order_products` VALUES (6,1.50,50,1,1),(7,2.00,0,2,9),(8,2.00,37,2,10),(9,2.00,22,2,11),(10,2.00,22,2,12);
+INSERT INTO `order_products` VALUES (17,130.99,1,4,19),(18,130.99,1,4,20),(19,130.99,1,4,21),(20,130.99,1,4,22);
 /*!40000 ALTER TABLE `order_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -140,7 +140,7 @@ CREATE TABLE `order_status` (
   `trackingnumber` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `trackingnumber` (`trackingnumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -149,7 +149,7 @@ CREATE TABLE `order_status` (
 
 LOCK TABLES `order_status` WRITE;
 /*!40000 ALTER TABLE `order_status` DISABLE KEYS */;
-INSERT INTO `order_status` VALUES (5,0,'undefined'),(8,0,'tasdadse'),(9,0,'tasddadse'),(11,0,'e19f1b04-8eb8-42ad-b0e0-ca0de80565fa'),(12,0,'1f96e5bc-5e21-4dd5-b977-e49953b2ffd4'),(13,0,'8775feb6-f561-4ef0-8788-77e4af006726'),(14,0,'6ffd662f-547a-484b-b84d-6c1cd0e6135c'),(15,0,'3e0c73e6-2243-401a-9ef4-88db0903d600'),(16,0,'76bec49c-f51a-4690-aed3-2405ff7fb626'),(17,0,'d6343eaf-719d-4e66-821f-f2c70ee4aa08'),(18,0,'b291d096-4f4c-4fc4-8c4a-3684f1ad4c93'),(19,0,'e5f7c5c0-273c-4c53-97c9-4656f1e57262'),(20,0,'8ca728ff-e52d-4199-95f1-681b032aedba'),(21,0,'0ba2e8f3-475b-4645-acac-d4a188b762aa'),(22,0,'d4ec8293-7007-4274-bdd3-965a6bef36cd'),(23,0,'2e639e69-7397-40a9-aa46-12d689c2306b'),(24,0,'d265236b-78d7-4324-b35c-a0ea81d7984b'),(25,0,'23baa6d0-e5cb-4a88-a545-9512029dc774'),(26,0,'08361df5-1155-42dc-9748-2b8ab07fe068'),(27,0,'20a59258-4af8-429c-9619-cc1da7bf9c53');
+INSERT INTO `order_status` VALUES (5,0,'undefined'),(8,0,'tasdadse'),(9,0,'tasddadse'),(11,0,'e19f1b04-8eb8-42ad-b0e0-ca0de80565fa'),(12,0,'1f96e5bc-5e21-4dd5-b977-e49953b2ffd4'),(13,0,'8775feb6-f561-4ef0-8788-77e4af006726'),(14,0,'6ffd662f-547a-484b-b84d-6c1cd0e6135c'),(15,0,'3e0c73e6-2243-401a-9ef4-88db0903d600'),(16,0,'76bec49c-f51a-4690-aed3-2405ff7fb626'),(17,0,'d6343eaf-719d-4e66-821f-f2c70ee4aa08'),(18,0,'b291d096-4f4c-4fc4-8c4a-3684f1ad4c93'),(19,0,'e5f7c5c0-273c-4c53-97c9-4656f1e57262'),(20,0,'8ca728ff-e52d-4199-95f1-681b032aedba'),(21,0,'0ba2e8f3-475b-4645-acac-d4a188b762aa'),(22,0,'d4ec8293-7007-4274-bdd3-965a6bef36cd'),(23,0,'2e639e69-7397-40a9-aa46-12d689c2306b'),(24,0,'d265236b-78d7-4324-b35c-a0ea81d7984b'),(25,0,'23baa6d0-e5cb-4a88-a545-9512029dc774'),(26,0,'08361df5-1155-42dc-9748-2b8ab07fe068'),(27,0,'20a59258-4af8-429c-9619-cc1da7bf9c53'),(28,0,'ed78d8ea-c598-42aa-8cdf-c2d5e997b1fc'),(29,0,'607940f4-3b01-4e72-89cd-4035eea4c45a'),(30,0,'94f05435-4347-4b6d-9cef-dfbfe0f7ee53'),(31,0,'c5750318-a6c4-43d1-ba74-1f2ca1739d3a'),(32,0,'e5344302-a3ec-428a-8161-7d6c3aee1d9e'),(33,0,'e36028f1-ff70-4f1e-95af-4777d1899e5b'),(34,0,'2941ab9c-3a14-4aa3-9814-2e88d119b2c4'),(35,0,'472965da-1de5-427d-ab2b-a6a49afae530'),(36,0,'a2e69c68-00d3-44a6-8214-b1ce7061ee59'),(37,0,'eefc615e-63a2-430f-8656-36a4229e434e');
 /*!40000 ALTER TABLE `order_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,7 +169,7 @@ CREATE TABLE `orders` (
   KEY `orders_ibfk_2` (`order_statusId`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`order_statusId`) REFERENCES `order_status` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -178,7 +178,7 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,8,18),(2,9,18),(3,9,18),(4,14,27),(5,15,27),(6,16,27),(7,17,27),(8,18,27),(9,19,27),(10,20,27),(11,26,27),(12,27,27);
+INSERT INTO `orders` VALUES (19,34,28),(20,35,28),(21,36,28),(22,37,28);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -203,7 +203,7 @@ CREATE TABLE `products` (
   KEY `article_ibfk_2` (`categoryId`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE CASCADE,
   CONSTRAINT `products_ibfk_2` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -212,7 +212,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'LED Leiste mit RGBW',3.56,'Mit warmweiß funktion',2,2,1,1),(2,'Nagel ',2.00,'Gut zum nageln',119,2,1,3),(3,'Glühbirne x35 10000000 Watt',1.60,'Glühbirne mit viel Watt',2,2,1,1),(4,'LG TV 500x QHD',130.99,'Richtig guter TV mit perfekter Qualität',27,3,1,4);
+INSERT INTO `products` VALUES (1,'LED Leiste mit RGBW',3.56,'Mit warmweiß funktion',0,2,1,1),(2,'Nagel ',2.00,'Gut zum nageln',83,2,1,3),(3,'Glühbirne x35 10000000 Watt',1.60,'Glühbirne mit viel Watt',0,2,1,1),(4,'LG TV 500x QHD',130.99,'Richtig guter TV mit perfekter Qualität',23,3,1,4),(5,'Raspberry Pi 4, Raspberry Pi Starter Kit (4GB RAM / 32GB SD)',209.99,'Raspberry Pi 4 4GB RAM: New SOC Broadcom BCM2711, 1.5GHz Quad-Core ARM Cortex-A72 CPU. Dual band 802.11b/g/n/ac WiFi (2.4/5.0 GHz) and BT 5.0 module for fast wireless networking with less interference and better reception.\r\nHigh Capacity - 2×USB 3 0 Ports, 2 × USB 2 0 ports and 2 × Micro HDMI ports. The HEVC 4K streams can support at 60 fps and manage 2 screens in 4K.\r\n32GB Class 10 SD Card: pre-installed with Raspberry Pi OS (Raspbian), can be easily booted with Raspbian for Raspberry Pi 4. Equipped with an SD card reader that is compatible with USB-A & USB-C C, easy to connect microSD to the computer.\r\nPowerful Cooling System: Equipped with 1 mini heat sink fan and 3 copper heat sink, your Raspberry Pi 4 can provide impeccable heat dissipation and prevent system failure. Uniquely designed premium housing provides enough space for fan and gap for heat dissipation.\r\nProfessional power supply with on/off switch: 1.5M/5V 3A USB-C power supply with noise filter and on/off switch, specially designed and tested for Raspberry Pi 4 (UL Listed) low-loss power transmission, thick and durable.\r\n',8345,3,2,5),(6,'Be Quiet Straight Power 11 Power Supply, Black 1000W',179.43,'Ausgestattet mit einem nahezu unhörbaren SilentWings3 135mm Lüfter\nDas be quiet! Straight Power 11 1000W setzt neue Maßstäbe für flüsterleise Systeme, ohne auch nur geringste Kompromisse bei der Stromversorgung einzugehen\nGesteigerte Spannungsregulierung und Stabilität dank fortschrittlicher LLC, SR und DC/DC Technologie\nKomfortables vollmodulares Kabelmanagement sorgt für maximale Flexibilität und einfache Bedienung\nProduktkonzeption, Design und Qualitätskontrolle in Deutschland\n',453,4,1,5);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +235,7 @@ CREATE TABLE `reviews` (
   KEY `productId` (`productId`),
   CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`productId`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -244,7 +244,7 @@ CREATE TABLE `reviews` (
 
 LOCK TABLES `reviews` WRITE;
 /*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
-INSERT INTO `reviews` VALUES (1,'TESt','',6,18,1),(2,'TESt','Content',6,18,3),(3,'test','test',5,18,1);
+INSERT INTO `reviews` VALUES (9,'asd','ads',3,28,5),(10,'ompatible with USB-A & USB-C C, easy to connect microSD to t','i 4 4GB RAM: New SOC Broadcom BCM2711, 1.5GHz Quad-Core ARM Cortex-A72 CPU. Dual band 802.11b/g/n/ac WiFi (2.4/5.0 GHz) and BT 5.0 module for fast wireless networking with less interference and better reception. High Capacity - 2×USB 3 0 Ports, 2 × USB 2 0 ports and 2 × Micro HDMI ports. The HEVC 4K streams can support at 60 fps and manage 2 screens in 4K. 32GB Class 10 SD Card: pre-installed with Raspberry Pi OS (Raspbian), can be easily booted with Raspbian for Raspberry Pi 4. Equipped with an SD card reader that is compatible with USB-A & USB-C C, easy to connect microSD to the computer. Powerful Cooling System: Equipped with 1 mini heat sink fan and 3 copper heat sink, your Raspberry Pi 4 can provide impeccable heat dissipation and prevent system failure. Uniquely designed premium housing provides enough space f',5,28,5);
 /*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -275,6 +275,31 @@ INSERT INTO `sellers` VALUES (1,'Rüdiger','Hersteller für Wasserleitungen'),(2
 UNLOCK TABLES;
 
 --
+-- Table structure for table `shopping_cart_item`
+--
+
+DROP TABLE IF EXISTS `shopping_cart_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `shopping_cart_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `shopping_cart_item`
+--
+
+LOCK TABLES `shopping_cart_item` WRITE;
+/*!40000 ALTER TABLE `shopping_cart_item` DISABLE KEYS */;
+/*!40000 ALTER TABLE `shopping_cart_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `userinfos`
 --
 
@@ -290,7 +315,7 @@ CREATE TABLE `userinfos` (
   PRIMARY KEY (`id`),
   KEY `userinfos_ibfk_1` (`userId`),
   CONSTRAINT `userinfos_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +324,7 @@ CREATE TABLE `userinfos` (
 
 LOCK TABLES `userinfos` WRITE;
 /*!40000 ALTER TABLE `userinfos` DISABLE KEYS */;
-INSERT INTO `userinfos` VALUES (6,'Janis','Meister','testuser',27);
+INSERT INTO `userinfos` VALUES (7,'Janis','Meister','Herr',28);
 /*!40000 ALTER TABLE `userinfos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,7 +344,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +353,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (18,'dertyp','address@email.com','password',0),(19,'janis','janis.meister87@gmail.com','$2a$10$uRt2KBcBcIHVD24XPdCIXeXfJmE6k/78CuXnSi0ukTEA9m0qfyKA6',0),(20,'janis2','jadnis.meister87@gmail.com','$2a$10$QuAII9wQsbKeFMVtJON/r.ke.jKGbUBBd24hUQWg65nKcVNDjJiGG',1),(27,'testuser','janis.mseister87@gmail.com','$2a$10$Xk2t83/CuR2iF5q/gOaqiOxg1TT155ML7fJGjTYSL84VPiZPMGZDe',0);
+INSERT INTO `users` VALUES (28,'janis','janis.meister87@','$2a$10$E2nEjP/LkKhF750iYiyEIuzrGCMYStAWwE9d8iGWwhIoof4JOC/we',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -341,4 +366,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-26 16:01:18
+-- Dump completed on 2022-03-29 14:40:35
