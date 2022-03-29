@@ -5,23 +5,26 @@
     <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body>
-    <h1>Login</h1>
+    <%- include('partials/auth_header'); %>
+    <div class="content">
+        <h1 class="text-center">Login</h1>
 
-    <form action="/auth/login" method="POST">
-        <p id="error-text"><%- error %></p>
-
-        <label for="username">
-            <p>Benutzername:</p>
-            <input required type="text" name="username" id="usernameInput" placeholder="Geben Sie Ihren Benutzernamen ein">
-        </label>
-        
-        <label for="password">
-            <p>Passwort:</p>
-            <input required type="password" name="password" id="password1Input" placeholder="Geben Sie Ihr Passwort ein">
-        </label>
-
-        <input style="width: 40%;cursor:pointer;" type="submit" value="Login">
-        <a class="text-redirect" href="/register">Sie haben keinen Account?</a>
-    </form>
+        <form class="auth_form" action="/auth/login" method="POST">
+            <p id="error-text"><%- error %></p>
+    
+            <label for="username">
+                <p>Benutzername:</p>
+                <input required type="text" name="username" id="usernameInput" placeholder="Geben Sie Ihren Benutzernamen ein">
+            </label>
+            
+            <label for="password">
+                <p>Passwort:</p>
+                <input required type="password" name="password" id="password1Input" placeholder="Geben Sie Ihr Passwort ein">
+            </label>
+    
+            <input style="width: 40%;cursor:pointer;" type="submit" value="Login">
+            <a class="text-redirect" href="/register">Sie haben keinen Account?</a>
+        </form>
+    </div>
 </body>
 </html>

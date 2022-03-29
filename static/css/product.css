@@ -1,14 +1,3 @@
-*{
-    padding:0;
-}
-
-h1, h2{
-    margin-left: 0px;
-    text-align: left;
-    padding-bottom: 0;
-    margin-bottom: 0px;
-}
-
 .seller{
     display: block;
     height: 30px;
@@ -34,37 +23,6 @@ h1, h2{
     border: 2px solid rgb(143, 143, 143);
     float:left;
 }
-#content
-{
-    width: 1000px;
-    background-color: rgb(244, 244, 244);
-    margin:auto;
-    padding-top: 10px;
-}
-#productPicture
-{
-    width: 40%;
-    height: 400px;
-    /*background-color: rgb(85, 85, 85);*/
-    display: block;
-    float: left;
-    border-bottom: 2px solid rgb(104, 117, 151);
-}
-
-#productPicture img
-{
-    width: 90%;
-    display: block;
-}
-#info
-{
-    width: 60%;
-    height: 400px;
-    display: block;
-    float: right;
-    /*background-color: rgb(121, 170, 182);*/
-    border-bottom: 2px solid rgb(104, 117, 151);;
-}
 
 .order-button{
     color: rgb(255, 255, 255);
@@ -85,50 +43,47 @@ h1, h2{
     margin-right: 30px;
     margin-top: 10px;
 }
-
-#description
-{
-    width: 100%;
-    display: block;
-    float: left;
-    background-color: rgba(103, 187, 183, 0);
-    border-bottom: 2px solid rgb(104, 117, 151);
-}
-
-#description p,h2 {
-    padding-left: 30px;
-    padding-right: 30px;
-}
-
-#newReview{
-    width: 100%;
-    display: block;
-    float: left;
-    background-color: rgba(45, 66, 94, 0);
-    padding-bottom: 20px;
+/* Info header*/
+.product-header{
+    height: 400px;
     border-bottom: 2px solid rgb(104, 117, 151);;
 }
-#reviews{
-    width: 100%;
-    height: 1600px;
+#product-image
+{
+    width: 40%;
+    height: 400px;
     display: block;
     float: left;
-    background-color: rgba(39, 39, 39, 0);
+}
 
+#product-image img
+{
+    width: 90%;
+    display: block;
 }
-#reviewTemplate
+
+#product-info
+{
+    width: 60%;
+    height: 400px;
+    display: block;
+    float: right;
+}
+
+/* Sections */
+section
 {
     width: 100%;
-    float: left;
-    margin-bottom: 20px;
-}
-#reviewTemplatePicture
-{
-    width: 200px;
-    height: 200px;
     display: block;
-    float: left;
-    background-color: rgb(85, 158, 255);
+    background-color: rgba(103, 187, 183, 0);
+    border-bottom: 2px solid rgb(104, 117, 151);
+    padding-top:20px;
+    padding-bottom: 10px;
+}
+
+section p, h2 {
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 
@@ -137,31 +92,40 @@ h1, h2{
     width: 100%;
     height: 50px;
     display: block;
-    float: left;
+    
     background-color: rgb(124, 142, 212);
     
 }
-#text
-{
-    width: 100%;
-    height: 150px;
-    display: block;
-    float: left;
-    background-color: rgb(211, 196, 247);
-}
-#reviewTemplateText
-{
-    background-color: rgb(235, 196, 228);
+/* review */
+.review-container{
+    margin-bottom: 20px;
 }
 
-form{
+.review-header{
+    padding-top:10px;
+    padding-bottom:10px;
+    background-color: rgb(124, 142, 212);
+    display:block;
+    width: 100%;
+}
+
+.review-content{
+    display: block;
+    width: 100%;
+    background-color: rgb(204, 214, 255);
+    padding-top:10px;
+    padding-bottom:20px;
+}
+
+
+.product-form{
     display:block;
     margin-left: auto;
     margin-right: auto;
     width: 500px;
 }
 
-form label{
+.product-form label{
     display:block;
     margin-left: auto;
     margin-right: auto;
@@ -169,7 +133,7 @@ form label{
     margin-top: 20px;
 }
 
-form label p{
+.product-form label p{
     width: 100%;
     display:block;
     margin-left: auto;
@@ -178,7 +142,7 @@ form label p{
     font-weight: bold;
     letter-spacing: 1.5px;
 }
-form label input{
+.product-form label input{
     width: 100%;
     display:block;
     margin-left: auto;
@@ -192,7 +156,7 @@ form label input{
     outline: none !important;
 }
 /* Submit button with blue background horizontal center*/
-form input[type="submit"]{
+.product-form input[type="submit"]{
     color: rgb(255, 255, 255);
     font-weight: bold;
     letter-spacing: 1.5px;
@@ -214,21 +178,21 @@ form input[type="submit"]{
 
 /* Hover */
 
-form label input:hover{
+.product-form label input:hover{
     border: 2px solid rgb(1, 197, 246);
 }
 
-form label input:focus{
+.product-form label input:focus{
     border: 2px solid rgb(1, 197, 246);
     box-shadow: 0 0 5px #719ece62;
 }
 
-form input[type="submit"]:hover{
+.product-form input[type="submit"]:hover{
     border: 2px solid rgb(7, 130, 200);
     background-color: rgb(7, 130, 200);
 }
 
-textarea{
+.product-form textarea{
     resize: vertical;
     width: 100%;
     display:block;
@@ -237,9 +201,3 @@ textarea{
 }
 
 
-@media only screen and (max-width: 1030px) {
-    #content
-    {
-        width: 100%; 
-    }
-  }

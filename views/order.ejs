@@ -18,7 +18,7 @@
     </div>
 
     <!--submit button-->
-    <form action="/order" method="POST">
+    <form class="order_form" action="/order" method="POST">
         <input hidden type="text" name="productId" value="<%= product.id %>">
         <input hidden   type="text" name="quantity" value="<%= quantity %>">
         <!-- Price is calculated on backend ;) -->

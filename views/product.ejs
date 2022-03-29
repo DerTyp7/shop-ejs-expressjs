@@ -10,13 +10,12 @@
         <%- include('partials/header'); %>
     </header>
 
-    <div id="content">
-
-        <div id="top">
-            <div id="productPicture">
+    <div class="content">
+        <section class="product-header">
+            <div id="product-image">
                 <img src="/images/examples.jpg" alt="">
             </div>
-            <div id="info">
+            <div id="product-info">
                 <h2><%= product.productName %></h2><br>
                 <p class="badge">Nr.:<%= product.id %></p><br>
 
@@ -24,34 +23,36 @@
 
                 <p class="product-detail"><b>Preis:</b> <%= product.price %> € / Stück</h2>
                 <p class="product-detail"><b>Kategorie:</b> <%= category.name %></h2>
-                <p style="word-wrap: break-word;"></p>
                 <div>
-                    <label style="margin-right: 30px; margin-left: 0px;
-
                     <% if(product.quantity > 0){%>
-                        color: green;">
-                        Lieferbar in <%= product.delivery_time %> - <%= product.delivery_time + 1 %> Tagen</label><br><br>
+                        <label style="margin-right: 30px; margin-left: 0px;color: green;">
+                            Lieferbar in <%= product.delivery_time %> - <%= product.delivery_time + 1 %> Tagen
+                        </label><br><br>
+
+
                         <div style=" float:right;">
                             <span><input type="number" id="quantity" min="1" max="<%= product.quantity %>" style="width: 30px; margin-left: 20px" value="1" ></span>
                             <label>/<%= product.quantity %></label><br>
                             <button class ="order-button"onclick="window.open('/order/<%= product.id %>/' + document.getElementById('quantity').value, '_self')">Bestellen</button>    
                         </div>
                     <% } else { %>
-                        color: red; font-weight:bold;">
-                        Aktuell nicht lieferbar!</label>
-                        <% } %>
+                        <label style="margin-right: 30px; margin-left: 0px;color: red; font-weight:bold;">
+                            Aktuell nicht lieferbar!
+                        </label>
+                    <% } %>
                 </div>
             </div>
-        </div>
+        </section>
 
-        <div id="description">
+        <section>
             <h2>Beschreibung</h2>
             <p><%= product.productDescription %> </p>
-        </div>
-        <% if(loggedIn){ %>
-        <div id="newReview">
+        </section>
+
+        <% if(user){ %>
+        <section>
             <h2 style="padding-left: 30px;">Rezensionen</h2>
-            <form action="/review/create/<%= product.id %>" method="post">
+            <form class="product-form" action="/review/create/<%= product.id %>" method="post">
                 <label for="title">
                     <p>Titel: </p>
                     <input type="text" name="title">
@@ -68,29 +69,24 @@
                 
                 <input style="width: 150px" type="submit" value="Senden">
             </form>
-        </div>
+        </section>
         <% } %>
-        <div id="reviews">
+        <section>
             <% if(reviews.length > 0){ %>
                 <% for(let i = 0; i < reviews.length; i++){ %>
-                    <div id="reviewTemplate">
-                        <div style="width: 100%; display: block; float: left;">
-                            <div id= data >
-                                <h3 style="padding-left: 20px; float:left"><%= reviews[i].name %></h3>
-                                <p style="float:right; padding-right: 20px;">Bewertung: <%= reviews[i].rating %></p>
-                            </div>
-                            <div id="text" >
-                                <h3 style="padding-left: 20px; padding-right: 20px; width: 100%;"><%= reviews[i].title %></h3>
-                                <p style="padding-left: 20px; padding-right: 20px;"><%= reviews[i].content %></p>
-                            
-                            </div>
+                    <div class="review-container">
+                        <div class="review-header">
+                            <p>(<%= reviews[i].rating %>) <b><%= reviews[i].name %>: </b> <%= reviews[i].title %></p>
+                        </div>
+                        <div class="review-content">
+                            <p><%= reviews[i].content %></p>
                         </div>
                     </div>
-        <% } %>
-        <% }else{ %>
-            <div style="width: 100%; height: 100px;">Leider hat dieses Produkt noch keine Bewertung. :(</div>
+                <% } %>
+            <% }else{ %>
+            <h2 style="color:rgb(158, 51, 51);">Leider hat dieses Produkt noch keine Bewertung. :(</h2>
             <% } %>
-        </div>
+        </section>
     </div> 
     <%- include('partials/footer'); %>
 </body>

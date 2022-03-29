@@ -8,6 +8,7 @@ const uuid = require("uuid");
 
 // Import Modules
 const mysql_handler = require("./mysql_handler");
+const validator = require("./validators")
 
 // Global Variables
 const app = express();
@@ -332,7 +333,29 @@ app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
     let cityName = req.body.cityName;
     let country = req.body.country;
 
-    let error = ""; // Error message
+    let error = "";
+    /*
+    0: No error
+    error_username_dup
+    error_email_dup
+    error_password_length_short
+    error_password_length_long
+    error_password_emismatch
+    error_email_invalid
+    error_username_invalid
+    error_firstname_invalid
+    error_lastname_invalid
+    error_street_invalid
+    error_housenumber_invalid
+    error_postcode_invalid
+    error_cityname_invalid
+    error_country_invalid
+    */
+
+
+    if(!validator.validate_password(password1)){
+        error += "Passwort muss mindestens 8 Zeichen lang sein!\n";
+    }
 
     if(password1 != password2){ // If passwords don't match
         error += "Passwörter sind unterschiedlich!";
@@ -346,7 +369,7 @@ app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
     }
 
     if(error != ""){ // If there is an error
-        res.redirect(`/register/${error}`); // Redirect to register page with error message
+        res.send("ERROR") // Redirect to register page with error message
     }else{
         bcrypt.genSalt(10, function(err, salt) { // Generate salt
             bcrypt.hash(password1, salt, function(err, hash){ // Hash password
