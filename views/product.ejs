@@ -11,38 +11,36 @@
     </header>
 
     <div id="content">
+        <div id="productPicture">
+            <img src="/images/examples.jpg" alt="">
+        </div>
+        <div id="info">
+            <h2><%= product.productName %></h2><br>
+            <p class="badge">Nr.:<%= product.id %></p><br>
 
-        <div id="top">
-            <div id="productPicture">
-                <img src="/images/examples.jpg" alt="">
-            </div>
-            <div id="info">
-                <h2><%= product.productName %></h2><br>
-                <p class="badge">Nr.:<%= product.id %></p><br>
+            <p class="seller">Verkäufer: <%= product.sellerName%></p><br>
 
-                <p class="seller">Verkäufer: <%= product.sellerName%></p><br>
+            <p class="product-detail"><b>Preis:</b> <%= product.price %> € / Stück</h2>
+            <p class="product-detail"><b>Kategorie:</b> <%= category.name %></h2>
+            <p style="word-wrap: break-word;"></p>
+            <div>
+                <label style="margin-right: 30px; margin-left: 0px;
 
-                <p class="product-detail"><b>Preis:</b> <%= product.price %> € / Stück</h2>
-                <p class="product-detail"><b>Kategorie:</b> <%= category.name %></h2>
-                <p style="word-wrap: break-word;"></p>
-                <div>
-                    <label style="margin-right: 30px; margin-left: 0px;
-
-                    <% if(product.quantity > 0){%>
-                        color: green;">
-                        Lieferbar in <%= product.delivery_time %> - <%= product.delivery_time + 1 %> Tagen</label><br><br>
-                        <div style=" float:right;">
-                            <span><input type="number" id="quantity" min="1" max="<%= product.quantity %>" style="width: 30px; margin-left: 20px" value="1" ></span>
-                            <label>/<%= product.quantity %></label><br>
-                            <button class ="order-button"onclick="window.open('/order/<%= product.id %>/' + document.getElementById('quantity').value, '_self')">Bestellen</button>    
-                        </div>
-                    <% } else { %>
-                        color: red; font-weight:bold;">
-                        Aktuell nicht lieferbar!</label>
-                        <% } %>
-                </div>
+                <% if(product.quantity > 0){%>
+                    color: green;">
+                    Lieferbar in <%= product.delivery_time %> - <%= product.delivery_time + 1 %> Tagen</label><br><br>
+                    <div style=" float:right;">
+                        <span><input type="number" id="quantity" min="1" max="<%= product.quantity %>" style="width: 30px; margin-left: 20px" value="1" ></span>
+                        <label>/<%= product.quantity %></label><br>
+                        <button class ="order-button"onclick="window.open('/order/<%= product.id %>/' + document.getElementById('quantity').value, '_self')">Bestellen</button>    
+                    </div>
+                <% } else { %>
+                    color: red; font-weight:bold;">
+                    Aktuell nicht lieferbar!</label>
+                    <% } %>
             </div>
         </div>
+        
 
         <div id="description">
             <h2>Beschreibung</h2>
@@ -51,7 +49,7 @@
         <% if(loggedIn){ %>
         <div id="newReview">
             <h2 style="padding-left: 30px;">Rezensionen</h2>
-            <form action="/review/create/<%= product.id %>" method="post">
+            <form class="form" action="/review/create/<%= product.id %>" method="post">
                 <label for="title">
                     <p>Titel: </p>
                     <input type="text" name="title">
