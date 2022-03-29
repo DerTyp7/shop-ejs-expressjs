@@ -20,7 +20,7 @@ body {
 
 /* LOGO PART */
 .headerDIVLogo {
-    width: 20%;
+    width: 35px;
 }
 .headerDIVLogo > img {
     float: left;
@@ -53,12 +53,12 @@ body {
 
 /* BUTTON PART */
 .headerDIVButton {
-    width: 20%;
+    float: right;
 }
-.headerDIVButton > button {
+.headerDIVButton button {
     height: 30px;
     float: right;
-    margin-right: 10px;
+    margin-right: 5px;
     height: 35px;
     border-radius: 5px;
     border: 3px solid rgb(6, 70, 107);
@@ -92,3 +92,9 @@ body {
     background-color: #414854;
     margin: 0;
 }
+
+@media only screen and (max-width: 800px) {
+    .headerDIVSearch {
+        
+    }
+  }
