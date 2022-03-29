@@ -16,7 +16,7 @@
                 <img src="/images/examples.jpg" alt="">
             </div>
             <div id="product-info">
-                <h2><%= product.productName %></h2><br>
+                <h2 style="padding-left: 0px"><%= product.productName %></h2><br>
                 <p class="badge">Nr.:<%= product.id %></p><br>
 
                 <p class="seller">Verkäufer: <%= product.sellerName%></p><br>
@@ -25,9 +25,9 @@
                 <p class="product-detail"><b>Kategorie:</b> <%= category.name %></h2>
                 <div>
                     <% if(product.quantity > 0){%>
-                        <label style="margin-right: 30px; margin-left: 0px;color: green;">
+                        <p style="margin-right: 30px; margin-left: 0px;color: green;">
                             Lieferbar in <%= product.delivery_time %> - <%= product.delivery_time + 1 %> Tagen
-                        </label><br><br>
+                        </p><br><br>
 
 
                         <div style=" float:right;">
@@ -36,9 +36,9 @@
                             <button class ="order-button"onclick="window.open('/order/<%= product.id %>/' + document.getElementById('quantity').value, '_self')">Bestellen</button>    
                         </div>
                     <% } else { %>
-                        <label style="margin-right: 30px; margin-left: 0px;color: red; font-weight:bold;">
+                        <p style="margin-right: 30px; margin-left: 0px;color: red; font-weight:bold;">
                             Aktuell nicht lieferbar!
-                        </label>
+                        </p>
                     <% } %>
                 </div>
             </div>
@@ -49,9 +49,10 @@
             <p><%= product.productDescription %> </p>
         </section>
 
-        <% if(user){ %>
+        
         <section>
             <h2 style="padding-left: 30px;">Rezensionen</h2>
+            <% if(user){ %>
             <form class="product-form" action="/review/create/<%= product.id %>" method="post">
                 <label for="title">
                     <p>Titel: </p>
@@ -69,8 +70,8 @@
                 
                 <input style="width: 150px" type="submit" value="Senden">
             </form>
+            <% } %>
         </section>
-        <% } %>
         <section>
             <% if(reviews.length > 0){ %>
                 <% for(let i = 0; i < reviews.length; i++){ %>
@@ -84,10 +85,10 @@
                     </div>
                 <% } %>
             <% }else{ %>
-            <h2 style="color:rgb(158, 51, 51);">Leider hat dieses Produkt noch keine Bewertung. :(</h2>
+            <h4 style="color:rgb(158, 51, 51);" class="text-center">Leider hat dieses Produkt noch keine Bewertung.</h4>
             <% } %>
         </section>
     </div> 
-    <%- include('partials/footer'); %>
+   <!--<%- include('partials/footer'); %>--> 
 </body>
 </html>

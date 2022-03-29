@@ -8,7 +8,7 @@ const uuid = require("uuid");
 
 // Import Modules
 const mysql_handler = require("./mysql_handler");
-const validator = require("./validators")
+const validators = require("./validators")
 
 // Global Variables
 const app = express();
@@ -83,14 +83,19 @@ function authenticatedHandler(req, res, next){
 function notAuthenticatedHandler(req, res, next){ 
     const authcookie = req.cookies.authcookie; // Get authcookie from cookie
 
-    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{ // Verify authcookie
-        if(err){ // If authcookie is invalid
-            console.log(err);
-            next(); // Continue to next handler
-        } else if(data.user){ // If authcookie is valid
-            res.redirect("/");      
-        }
-    });
+    if(authcookie){
+        jwt.verify(authcookie, SECRET_KEY, (err, data) =>{ // Verify authcookie
+            if(err){ // If authcookie is invalid
+                console.log(err);
+                next(); // Continue to next handler
+            } else if(data.user){ // If authcookie is valid
+                res.redirect("/");      
+            }
+        });
+    }else{
+        next();
+    }
+    
 }
 
 // Homepage
@@ -318,7 +323,7 @@ app.get("/login/:error?", notAuthenticatedHandler, (req, res) => {
 });
 
 // Register POST Request
-app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
+app.post("/auth/register", notAuthenticatedHandler, (req, res) =>{
     // Get data from POST request
     let username = req.body.username;
     let email = req.body.email;
@@ -330,17 +335,18 @@ app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
     let street = req.body.street;
     let housenumber = req.body.housenumber;
     let postcode = req.body.postcode;
-    let cityName = req.body.cityName;
+    let city = req.body.city;
     let country = req.body.country;
 
-    let error = "";
+    let error = false;
     /*
     0: No error
-    error_username_dup
-    error_email_dup
-    error_password_length_short
-    error_password_length_long
-    error_password_emismatch
+    error_username_duplicate: Username already exists
+    error_email_duplicate: Email already exists
+    error_password_length_short: Password is too short
+    error_password_length_long: Password is too long
+    error_password_mismatch: Passwords do not match
+    error_password_invalid
     error_email_invalid
     error_username_invalid
     error_firstname_invalid
@@ -352,32 +358,117 @@ app.post("/auth/register", notAuthenticatedHandler,(req, res) =>{
     error_country_invalid
     */
 
-
-    if(!validator.validate_password(password1)){
-        error += "Passwort muss mindestens 8 Zeichen lang sein!\n";
+    validateUsername = validators.validate_username(username);
+    if(validateUsername != 0){
+        console.log(validateUsername);
+        res.send(validateUsername);
+        return;
+    }
+    
+    
+    validateEmail = validators.validate_email(email);
+    if(validateEmail != 0){     
+        console.log(validateEmail);
+        res.send(validateEmail);
+        return;
     }
 
-    if(password1 != password2){ // If passwords don't match
-        error += "Passwörter sind unterschiedlich!";
-    }else if(password1.length < 8){ // If password is too short
-        error += "Passwort muss mindestens 8 Zeichen lang sein!";
-    }
-    if(username.length < 3){ // If username is too short
-        error += "<br> Der Benutzername muss mindestens 3 Zeichen lang sein!"; 
-    }else if(username.length > 30){ // If username is too long
-        error += "<br> Der Benutzername darf maximal 30 Zeichen lang sein!";
+   
+    
+    validatePasswords = validators.validate_passwords(password1, password2);
+    if(validatePasswords != 0){
+        console.log(validatePasswords);
+        res.send(validatePasswords);
+        return;
     }
 
-    if(error != ""){ // If there is an error
-        res.send("ERROR") // Redirect to register page with error message
-    }else{
-        bcrypt.genSalt(10, function(err, salt) { // Generate salt
-            bcrypt.hash(password1, salt, function(err, hash){ // Hash password
-                mysql_handler.createUser(username, email, hash, firstname, lastname, gender, street, housenumber, postcode, cityName, country);
-                res.redirect(`/login/`);        
-            });
-        });
+    validateFirstname = validators.validate_firstname(firstname);
+    if(validateFirstname != 0){
+        console.log(validateFirstname);
+        res.send(validateFirstname);
+        return;
     }
+
+    validateLastname = validators.validate_lastname(lastname);
+    if(validateLastname != 0){
+        console.log(validateLastname);
+        res.send(validateLastname);
+        return;
+    }
+
+    validateGender = validators.validate_gender(gender);
+    if(validateGender != 0){
+        console.log(validateGender);
+        res.send(validateGender);
+        return;
+    }
+
+    validateStreet = validators.validate_street(street);
+    if(validateStreet != 0){
+        console.log(validateStreet);
+        res.send(validateStreet);
+        return;
+    }
+
+    validateHousenumber = validators.validate_housenumber(housenumber);
+    if(validateHousenumber != 0){
+        console.log(validateHousenumber);
+        res.send(validateHousenumber);
+        return;
+    }
+
+    validatePostcode = validators.validate_postcode(postcode);
+    if(validatePostcode != 0){
+        console.log(validatePostcode);
+        res.send(validatePostcode);
+        return;
+    }
+
+    validateCity = validators.validate_city(city);
+    if(validateCity != 0){
+        console.log(validateCity);
+        res.send(validateCity);
+        return;
+    }
+
+    validateCountry = validators.validate_country(country);
+    if(validateCountry != 0){
+        console.log(validateCountry);
+        res.send(validateCountry);
+        return;
+    }
+
+    
+
+
+
+     // CHECK DUPLICATES
+    // Check email duplicate
+    mysql_handler.con.query(`SELECT * FROM users WHERE email='${email}'`, (err, result) => {
+        if(err) console.log(err);
+        if(result.length > 0){
+            res.send("error_email_duplicate");
+        }else{
+
+        
+            // Check username duplicate
+            mysql_handler.con.query(`SELECT * FROM users WHERE username='${username}'`, (err, result) => {
+                if(err) console.log(err);
+                if(result.length > 0){
+                    res.send("error_username_duplicate");
+                }else{
+                    // NO duplicates
+                    bcrypt.genSalt(10, function(err, salt) { // Generate salt
+                        bcrypt.hash(password1, salt, function(err, hash){ // Hash password
+                            console.log("create");
+                            mysql_handler.createUser(username, email, hash, firstname, lastname, gender, street, housenumber, postcode, city, country);
+                            res.send("0");      
+                        });
+                    });
+                }
+            })
+        }
+    });    
 });
 
 // Login POST Request

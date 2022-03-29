@@ -8,72 +8,84 @@
     <%- include('partials/auth_header'); %>
     <div class="content">
         <h1 class="text-center">Register</h1>
-
+        <p id="error_text_general" class="error-text"></p>
         <form class="auth_form" action="" method="POST">
-            <p id="error-text"></p>
+            
     
             <h4>Account Informationen:</h4>
     
             <label for="username">
                 <p>Benutzername:</p>
                 <input required type="text" name="username" id="username" placeholder="Geben Sie Ihren Benutzernamen ein">
+                <p id="error_text_username" class="error-text"></p>
             </label>
             
             <label for="email">
                 <p>E-Mail:</p>
                 <input required type="email" name="email" id="email" placeholder="Geben Sie Ihre E-Mail-Adresse ein">
+                <p id="error_text_email" class="error-text"></p>
             </label>
     
             <label for="password1">
                 <p>Passwort:</p>
                 <input required type="password" name="password1" id="password1" placeholder="Geben Sie Ihr Passwort ein">
+                <p id="error_text_password1" class="error-text"></p>
             </label>
     
             <label for="password2">
                 <p>Passwort wiederholen:</p>
                 <input required type="password" name="password2" id="password2" placeholder="wiederholen Sie Ihr Passwort">
+                <p id="error_text_password2" class="error-text"></p>
             </label>
     
             <h4>Persönliche Informationen:</h4>
             <label for="firstname">
                 <p>Vorname:</p>
                 <input required type="text" name="firstname" id="firstname" placeholder="Geben Sie Ihren Vornamen ein">
+                <p id="error_text_firstname" class="error-text"></p>
             </label>
     
             <label for="lastname">
                 <p>Nachname:</p>
                 <input required type="text" name="lastname" id="lastname" placeholder="Geben Sie Ihren Nachnamen ein">
+                <p id="error_text_lastname" class="error-text"></p>
             </label>
     
             <label for="gender">
                 <p>Anrede (z.B. Herr, Frau):</p>
                 <input required type="text" name="gender" id="gender" placeholder="Wie lautet Ihre Anrede?">
+                <p id="error_text_gender" class="error-text"></p>
             </label>        
     
             <h4>Lieferadresse:</h4>
             <label for="street">
                 <p>Straße:</p>
                 <input required type="text" name="street" id="street" placeholder="Geben Sie Ihre Straße ein">
+                <p id="error_text_street" class="error-text"></p>
             </label>
     
             <label for="housenumber">
                 <p>Hausnummer:</p>
                 <input required type="number" min="1" name="housenumber" id="housenumber" placeholder="Geben Sie Ihre Hausnummer ein">
+                <p id="error_text_housenumber" class="error-text"></p>
             </label>
     
             <label for="postcode">
                 <p>Postleitzahl:</p>
                 <input required type="text" name="postcode" id="postcode" placeholder="Geben Sie die Postleitzahl ein">
+                <p id="error_text_postcode" class="error-text"></p>
             </label>
     
             <label for="cityName">
                 <p>Stadt:</p>
                 <input required type="text"  name="cityName" id="city" placeholder="Geben Sie die Stadt ein">
+                <p id="error_text_city" class="error-text"></p>
             </label>
     
             <label for="country">
                 <p>Land:</p>
                 <input required type="text" name="country" id="country" placeholder="Geben Sie das Land ein">
+                <p id="error_text_country" class="error-text"></p>
             </label>
     
             <input style="width: 40%;cursor:pointer;" type="button" value="Registrieren" onclick="submitForm()">
