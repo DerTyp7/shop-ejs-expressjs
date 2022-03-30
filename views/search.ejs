@@ -42,7 +42,20 @@
                             %>Keine Bewertungen<%
                             }
                         %></h4>
-                        <h4><%=prod.quantity %> auf Lager</h4>
+                        
+                        <%
+                            var col;
+                            if (prod.quantity > 5) {
+                                col = "green";
+                            } else if (prod.quantity > 0) {
+                                col = "orange";
+                            } else {
+                                col = "red";
+                            }
+                        %>
+                        <h4 style="color: <%=col %>">
+                            <%=prod.quantity %> auf Lager
+                        </h4>
                     </div>
                     <div class="productImage">
                         <img src="<%=prod.img %>">
