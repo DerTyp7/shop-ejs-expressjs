@@ -12,8 +12,8 @@ con.query("SELECT * FROM users", function(err, result){
 
 let con = mysql.createConnection({ // TODO: change to config file
     host: "localhost",
-    user: "onlineshop",
-    password: "TestUser321", // TODO: DO NOT STORE PASSWORDS IN THE CODE
+    user: "root",
+    password: "", // TODO: DO NOT STORE PASSWORDS IN THE CODE
     database: "onlineshop"
 });
 

@@ -7,9 +7,23 @@
     <header>
        <%- include('partials/header'); %>
     </header>
-    <div class="filtersDIV" style="display:none">
-        <br/>
-        <h3 style="text-align: center; "> FILTER COMMING SOON </h3>
+
+    <div class="filtersDIV">
+        <select id="cat-select" class="left" onchange="updateFilters();">
+            <option value="0">Kategorie: Alle</option>
+            <% for(var i=0; i < categories.length; i++) { var cat = categories[i]; %>
+                <option <%=Cat == cat.id ? "selected" : ""%> value="<%=cat.id%>">Kategorie: <%=cat.name %></option>
+            <% } console.log(sort) %>
+        </select>
+
+        <select id="sort-select" class="right" onchange="updateFilters();">
+            <option <%=sort == 0 ? "selected" : ""%> value="0">Sortierung: Standart</option>
+            <option <%=sort == 1 ? "selected" : ""%> value="1">Sortierung: Preis aufsteigend</option>
+            <option <%=sort == 2 ? "selected" : ""%> value="2">Sortierung: Preis absteigend</option>
+            <option <%=sort == 3 ? "selected" : ""%> value="3">Sortierung: Meistverkauft</option>
+            <option <%=sort == 4 ? "selected" : ""%> value="4">Sortierung: A-Z</option>
+            <option <%=sort == 5 ? "selected" : ""%> value="5">Sortierung: Z-A</option>
+        </select>
     </div>
         
     <% if (products.length == 0) { %>
@@ -69,22 +83,23 @@
 </html>
 
 <script type="text/javascript">
+    var cat = document.getElementById("cat-select");
+    var sort = document.getElementById("sort-select");
+    function updateFilters() {
+        window.open('/search/<%=search %>/?cat='+cat.value+'&sort='+sort.value,'_self')
+    }
+
     function openProduct(id, newWindow) {
         window.open('/product/'+id, newWindow ? '_blank' : '_self')
     }
 </script>
 
 <style type="text/css">
-    html,body{
-    height: 100% !important;
-    display: block !important;
-    min-height: 100vh;
-    flex-direction:unset !important;
-    }
-
-    a, a:hover, a:focus, a:active > .allProductsDIV {
-        text-decoration: none;
-        color: inherit;
+    html, body{
+        height: 100% !important;
+        display: block !important;
+        min-height: 100vh;
+        flex-direction:unset !important;
     }
 
     /* SEARCH INFO */
@@ -129,7 +144,7 @@
         right: 0;
         bottom: 0;
     }
-    .productDIV > .productImage {
+    .productImage {
         width: calc(50% - 15px);
         height: calc(100% - 120px);
         position: absolute;
@@ -142,7 +157,7 @@
     }
 
     /* DESCRIPTION */
-    .productDIV > .productInfo {
+    .productInfo {
         width: calc(50% - 15px);
         height: calc(100% - 60px);
         position: absolute;
@@ -153,7 +168,7 @@
     }
 
     /* PRICE ETC */
-    .productDIV > .productData {
+    .productData {
         width: calc(100% - 20px);
         height: 90px;
         position: absolute;
@@ -164,16 +179,25 @@
         margin: 0px;
         color: LightSlateGray;
     }
-
+    a, a:hover, a:focus, a:active > .allProductsDIV {
+        text-decoration: none;
+        color: inherit;
+    }
 
     /* FILTERS */
     .filtersDIV {
+        margin-top: 20px;
         position: relative;
         left: calc(10% + 10px);
         width: calc(80% - 20px);
-        height: 100px;
-        background-color: grey;
+        height: 30px;
     } 
+    .filtersDIV > .right {
+        float: right;
+    }
+    .filtersDIV > .left{
+        float: left;
+    }
 
     /* PRODUCTS GRID */
     .allProductsDIV {
