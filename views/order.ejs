@@ -12,10 +12,10 @@
 
     <div id="order-info">
         <p><b>Produktname:</b> <%= product.name %></p>
-        <p><b>Stückpreis:</b> <%= product.price %> €</p>
+        <p><b>Stückpreis:</b> <%= product.price.toFixed(2) %> €</p>
         <p><b>Anzahl: </b><%= quantity %></p>
         <hr>
-        <p><b>Gesamtpreis:</b> <%= quantity * product.price %> €</p>
+        <p><b>Gesamtpreis:</b> <%= (quantity * product.price).toFixed(2) %> €</p>
     </div>
 
     <!--submit button-->

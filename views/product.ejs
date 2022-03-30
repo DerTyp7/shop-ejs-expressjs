@@ -21,7 +21,7 @@
 
                 <p class="seller">Verkäufer: <%= product.sellerName%></p><br>
 
-                <p class="product-detail"><b>Preis:</b> <%= product.price %> € / Stück</h2>
+                <p class="product-detail"><b>Preis:</b> <%= product.price.toFixed(2) %> € / Stück</h2>
                 <p class="product-detail"><b>Kategorie:</b> <%= category.name %></h2>
                 <div>
                     <% if(product.quantity > 0){%>
