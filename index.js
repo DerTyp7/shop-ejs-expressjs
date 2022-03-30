@@ -210,15 +210,45 @@ app.post("/review/create/:productId", authenticatedHandler,(req, res) => {
 });
 
 // Search Page
-app.get("/search/:query",authNoRedirectHandler,(req, res) => {
+app.get("/search/:query/",authNoRedirectHandler,(req, res) => {
     let query = req.params.query;
     let dict = {
         title: "Suche",
         search: query,
-        user: req.user,  
+        user: req.user, 
+        sort: req.query.sort ? req.query.sort : 0,
+        Cat: req.query.cat ? req.query.cat : 0
     }
 
-    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE name LIKE ?;",["%"+query+"%"],function(err, result){
+    mysql_handler.con.query("SELECT * FROM categories;",function(err, result) {
+        if(err) throw err;
+
+        dict.categories = JSON.parse(JSON.stringify(result));
+    });
+
+    var catQuery = "";
+    var cat = req.query.cat;
+    if (typeof cat !== 'undefined' && cat != 0) {
+        catQuery = " AND categoryId = "+cat;
+    }
+
+    var sortQuery = "";
+    var sort = req.query.sort;
+    if (typeof sort !== 'undefined') {
+        if (sort == 1) {
+            sortQuery = " ORDER BY price ASC";
+        } else if (sort == 2) {
+            sortQuery = " ORDER BY price DESC";
+        } else if (sort == 3) {
+            sortQuery = " ORDER BY (SELECT SUM(quantity) FROM order_products o WHERE o.productId = p.id) DESC";
+        } else if (sort == 4) {
+            sortQuery = " ORDER BY name ASC";
+        } else if (sort == 5) {
+            sortQuery = " ORDER BY name DESC";
+        }
+    }
+    
+    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE name LIKE ? "+catQuery+" "+sortQuery+";",["%"+query+"%"],function(err, result){
         if(err) throw err;
 
         dict.products = JSON.parse(JSON.stringify(result));
