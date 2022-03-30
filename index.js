@@ -172,9 +172,9 @@ app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
             if(err) throw err;
             let reviews = JSON.parse(JSON.stringify(result));
             console.log(product)
-            mysql_handler.con.query(`SELECT * FROM categories WHERE id='${product.categoryId}'`,function(err,result){
+            mysql_handler.con.query(`SELECT * FROM categories WHERE id IN (SELECT category_id FROM product_categories WHERE product_id = ${product.categoryId})`,function(err,result){
                 if(err) throw err;
-                let category = JSON.parse(JSON.stringify(result))[0];
+                let categories = JSON.parse(JSON.stringify(result));
 
                 let dict = {
                     title: product.productName,
@@ -184,7 +184,7 @@ app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
                     productDescription: "ez",
                     loggedIn: true,
                     reviews: reviews,
-                    category: category, 
+                    categories: categories, 
                     user: req.user,                   
                 }
                 res.render('product', dict)
@@ -229,7 +229,7 @@ app.get("/search/:query/",authNoRedirectHandler,(req, res) => {
     var catQuery = "";
     var cat = req.query.cat;
     if (typeof cat !== 'undefined' && cat != 0) {
-        catQuery = " AND categoryId = "+cat;
+        catQuery = " AND (SELECT COUNT(*) FROM product_categories c WHERE c.category_id = "+cat+" AND c.product_id = p.id)";
     }
 
     var sortQuery = "";
