@@ -6,27 +6,29 @@
 </head>
 <body>
     <%- include('partials/header'); %>
-    <br>
-    <h1 class="text-center">Ihre Bestellung</h1>
-    <p style="width:100%; display:block;"class="error-text text-center"><%- error %></p>
-
-    <div id="order-info">
-        <p><b>Produktname:</b> <%= product.name %></p>
-        <p><b>Stückpreis:</b> <%= product.price.toFixed(2) %> €</p>
-        <p><b>Anzahl: </b><%= quantity %></p>
-        <hr>
-        <p><b>Gesamtpreis:</b> <%= (quantity * product.price).toFixed(2) %> €</p>
+    <div class="content">
+        <h1 class="text-center">Ihre Bestellung</h1>
+        <p style="width:100%; display:block;"class="error-text text-center"><%- error %></p>
+    
+        <div id="order-info">
+            <p><b>Produktname:</b> <%= product.name %></p>
+            <p><b>Stückpreis:</b> <%= product.price.toFixed(2) %> €</p>
+            <p><b>Anzahl: </b><%= quantity %></p>
+            <hr>
+            <p><b>Gesamtpreis:</b> <%= (quantity * product.price).toFixed(2) %> €</p>
+        </div>
+    
+        <!--submit button-->
+        <form class="order_form" action="/order" method="POST">
+            <input hidden type="text" name="productId" value="<%= product.id %>">
+            <input hidden   type="text" name="quantity" value="<%= quantity %>">
+            <!-- Price is calculated on backend ;) -->
+    
+            <input type="submit" value="Bestellen">
+        </form>
     </div>
-
-    <!--submit button-->
-    <form class="order_form" action="/order" method="POST">
-        <input hidden type="text" name="productId" value="<%= product.id %>">
-        <input hidden   type="text" name="quantity" value="<%= quantity %>">
-        <!-- Price is calculated on backend ;) -->
-
-        <input type="submit" value="Bestellen">
-    </form>
-
+    
+    <%- include('partials/footer'); %>
 </body>
 
 </html>
