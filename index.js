@@ -193,7 +193,7 @@ app.get("/search/:query",authNoRedirectHandler,(req, res) => {
         user: req.user,  
     }
 
-    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img FROM products p WHERE name LIKE ?;",["%"+query+"%"],function(err, result){
+    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE name LIKE ?;",["%"+query+"%"],function(err, result){
         if(err) throw err;
 
         dict.products = JSON.parse(JSON.stringify(result));

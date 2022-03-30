@@ -24,17 +24,22 @@
             <% for(var i=0; i < products.length; i++) {
                 var prod = products[i];
                 if (!prod.img) { prod.img = "/images/examples.jpg"; } 
-                prod.rating = Math.round(Math.random()*10); %>
+                //if (!prod.rating) { prod.rating = 0; } %>
                 <div class="productDIV" onClick="openProduct(<%=prod.id %>)">
                     <div class="productData">
                         <h4 style="color: Navy;"><%=prod.name %></h4>
                         <h4><%=prod.price %>€</h4>
                         <h4><%
-                            for (var i2=0; i2 < prod.rating; i2 = i2 + 2) { 
-                                %>★<% 
-                            }
-                            if (prod.rating%2 == 1) {
-                                %>☆<%
+                            if (prod.rating) {
+                                prod.rating = Math.round(prod.rating/2)
+                                for (var i2=0; i2 < prod.rating; i2++) { 
+                                    %>★<% 
+                                }
+                                for (var i2=prod.rating; i2 < 5; i2++) {
+                                    %>☆<%
+                                }
+                            } else {
+                            %>Keine Bewertungen<%
                             }
                         %></h4>
                         <h4><%=prod.quantity %> auf Lager</h4>
@@ -45,7 +50,7 @@
                     <div class="productInfo"><%=prod.description %></div>
                 </div>
             <% } %>
-    </div>
+        </div>
     <% } %>
 </body>
 </html>
@@ -58,57 +63,18 @@
 </script>
 
 <style type="text/css">
+    /* SEARCH INFO */
     .productsResInfDIV {
         position: relative;
         left: calc(10% + 10px);
         width: calc(80% - 20px);
         margin-top: 10px;
     }
-
     .noProductsH {
         text-align: center;
     }
 
-    .productImage > img {
-        position: absolute;
-        max-width: 100%;
-        max-height: 100%;
-        margin: auto;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-    .productDIV > .productData {
-        width: calc(100% - 20px);
-        height: 90px;
-        position: absolute;
-        left: 10px;
-        top: 10px;
-    }
-    .productData > h4 {
-        margin: 0px;
-        color: LightSlateGray;
-    }
-    .productDIV > .productImage {
-        width: calc(50% - 15px);
-        height: calc(100% - 120px);
-        position: absolute;
-        left: 10px;
-        bottom: 10px;
-    }
-    .productDIV > .productInfo {
-        width: calc(50% - 15px);
-        height: calc(100% - 60px);
-        position: absolute;
-        overflow-y: hidden;
-        right: 10px;
-        bottom: 10px;
-    }
-    .productDIV > h4 {
-        padding: 0px;
-        margin: 0px;
-    }
+    /* PRODUCT COLUMN */
     .productDIV {
         font-size: 16px;
         margin: 10px;
@@ -125,6 +91,54 @@
         cursor: pointer;
     } 
 
+    /* IMAGE */
+    .productImage > img {
+        position: absolute;
+        max-width: 100%;
+        max-height: 100%;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .productDIV > .productImage {
+        width: calc(50% - 15px);
+        height: calc(100% - 120px);
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+    }
+    .productDIV > h4 {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    /* DESCRIPTION */
+    .productDIV > .productInfo {
+        width: calc(50% - 15px);
+        height: calc(100% - 60px);
+        position: absolute;
+        overflow-y: hidden;
+        right: 10px;
+        bottom: 10px;
+    }
+
+    /* PRICE ETC */
+    .productDIV > .productData {
+        width: calc(100% - 20px);
+        height: 90px;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+    }
+    .productData > h4 {
+        margin: 0px;
+        color: LightSlateGray;
+    }
+
+
+    /* FILTERS */
     .filtersDIV {
         position: relative;
         left: calc(10% + 10px);
@@ -133,13 +147,13 @@
         background-color: grey;
     } 
 
+    /* PRODUCTS GRID */
     .allProductsDIV {
         font-size: 0;
         margin: 0px;
         width: calc(80% - 20px);
         left: 10%;
         position: absolute;
-        height: 100%;
         padding: 10px;
         background-color: white;
 
