@@ -25,9 +25,10 @@
                 var prod = products[i];
                 if (!prod.img) { prod.img = "/images/examples.jpg"; } 
                 //if (!prod.rating) { prod.rating = 0; } %>
-                <div class="productDIV" onClick="openProduct(<%=prod.id %>)">
+                <div class="productDIV">
                     <div class="productData">
-                        <h4 style="color: Navy;"><%=prod.name %></h4>
+                        <a href="/product/<%=prod.id %>"><h4 style="color: Navy;"><%=prod.name %></h4></a>
+
                         <h4><%=prod.price %>€</h4>
                         <h4><%
                             if (prod.rating) {
@@ -72,10 +73,14 @@
     function openProduct(id, newWindow) {
         window.open('/product/'+id, newWindow ? '_blank' : '_self')
     }
-
 </script>
 
 <style type="text/css">
+    a, a:hover, a:focus, a:active > .allProductsDIV {
+        text-decoration: none;
+        color: inherit;
+    }
+
     /* SEARCH INFO */
     .productsResInfDIV {
         position: relative;
@@ -101,7 +106,6 @@
         position: relative;
 
         height: 250px;
-        cursor: pointer;
     } 
 
     /* IMAGE */
@@ -133,6 +137,7 @@
         height: calc(100% - 60px);
         position: absolute;
         overflow-y: hidden;
+        overflow-x: hidden;
         right: 10px;
         bottom: 10px;
     }
