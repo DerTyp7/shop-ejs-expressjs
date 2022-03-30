@@ -175,7 +175,6 @@ app.post("/review/create/:productId", authenticatedHandler,(req, res) => {
     let rating = req.body.rating;
     let title = req.body.title;
     let content = req.body.content;
-    
 
     mysql_handler.con.query(`INSERT INTO reviews(title, content, rating, userId, productId)
      VALUES('${title}', '${content}', '${rating}', (SELECT id FROM users WHERE id = ${req.user}), (SELECT id FROM products WHERE id = ${productId}))`, (err, result) => {
@@ -186,48 +185,23 @@ app.post("/review/create/:productId", authenticatedHandler,(req, res) => {
 });
 
 // Search Page
-app.get("/search", authNoRedirectHandler,(req, res) => {
-    var products = [
-        {
-            title: "Panasonic LUMIX DC-GH5M2ME",
-            price: 1699.99,
-            img: "https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg",
-            desc: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        },
-        {
-            title: "Sony α 7 IV",
-            price: 2999.00,
-            img: "https://m.media-amazon.com/images/I/819+EOCsREL._AC_SL1500_.jpg",
-            desc: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        },
-        {
-            title: "Canon PowerShot G3 X",
-            price: 876.34,
-            img: "https://m.media-amazon.com/images/I/91bODLikNBL._AC_SL1500_.jpg",
-            desc: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        },
-        {
-            title: "Canon PowerShot SX710",
-            price: 495.00,
-            img: "https://m.media-amazon.com/images/I/91w6iw3JtiL._AC_SL1500_.jpg",
-            desc: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-        },
-    ]
-
+app.get("/search/:query",authNoRedirectHandler,(req, res) => {
+    let query = req.params.query;
     let dict = {
         title: "Suche",
-        products: products,
-        user: req.user,
+        search: query,
+        user: req.user,  
     }
 
-    mysql_handler.con.query("SELECT * FROM products", function(err, result){
+    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img FROM products p WHERE name LIKE ?;",["%"+query+"%"],function(err, result){
         if(err) throw err;
 
         dict.products = JSON.parse(JSON.stringify(result));
         
         res.render('search', dict)
     });
-});
+})
+
 
 // Order Page
 app.get("/order/:productId/:quantity/", authenticatedHandler, (req, res) => {
