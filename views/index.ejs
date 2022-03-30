@@ -7,14 +7,14 @@
 		<%- include('partials/header'); %>
 			<style>
 				html {
-				height: 100%;
-				overflow-x: auto;
-				overflow-y: scroll;
-				margin: 0;
-				background-color: white;
+					height: 100%;
+					overflow-x: auto;
+					overflow-y: scroll;
+					margin: 0;
+					background-color: white;
 				}
 				body {
-				min-height: 100%;
+					min-height: 100%;
 				}
 				.grid-container {				
 				display: flex;
@@ -66,7 +66,7 @@
 				<div class="grid-container">
 					<div class="grid-item">
 					<% let randomNr = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr].name %>
+					<p><%= products[randomNr].name %></p>
 						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/<%- products[randomNr].id%>','_self')">
 					</div>
 					<div class="grid-item">
@@ -77,15 +77,13 @@
 					</div>
 					<div class="grid-item">
 						<% let randomNr3 = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr3].name %>
+						<p><%= products[randomNr3].name %></p>
 						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/"<%- products[randomNr3].id%>','_self')">
-					
 					</div>
 					<div class="grid-item">
 						<% let randomNr4 = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr4].name %>
+						<p><%= products[randomNr4].name %></p>
 						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/"<%- products[randomNr4].id%>','_self')">
-					
 					</div>
 				</div>
 				<div class="grid-container" style="margin-bottom: 100px;">
