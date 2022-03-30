@@ -6,8 +6,9 @@
 </head>
 <body>
     <%- include('partials/header'); %>
-    <h1>Ihre Bestellung</h1>
-    <p id="error-text"><%- error %></p>
+    <br>
+    <h1 class="text-center">Ihre Bestellung</h1>
+    <p style="width:100%; display:block;"class="error-text text-center"><%- error %></p>
 
     <div id="order-info">
         <p><b>Produktname:</b> <%= product.name %></p>

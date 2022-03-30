@@ -36,17 +36,25 @@ function authNoRedirectHandler(req, res, next){
         } else if(data.user){ // If authcookie is valid
             req.user = data.user; // Set user to data.user
             mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
+
                 if(err) console.log(err);
                 let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
-                if(user.id){
-                    // Set user to req.user
-                    req.isAdmin = user.isAdmin;
-                    req.username = user.username;
-                    req.firstname = user.firstname;
-                    req.lastname = user.lastname;
-                    req.email = user.email;
+                console.log("Moin3")
+                try{
+                    if(user.id){
+                        console.log("Moin4")
+                        // Set user to req.user
+                        req.isAdmin = user.isAdmin;
+                        req.username = user.username;
+                        req.firstname = user.firstname;
+                        req.lastname = user.lastname;
+                        req.email = user.email;
+                    }
+                }catch{
+                    res.redirect('/logout')
+                    return;
                 }
-               
+                console.log("Moin5")
                 next(); // Continue to next handler
             });
         }
@@ -66,13 +74,16 @@ function authenticatedHandler(req, res, next){
             req.user = data.user; // Set user to data.user
             mysql_handler.con.query(`SELECT * FROM users LEFT JOIN userinfos ON users.id=userinfos.userId WHERE users.id = "${req.user}"`, (err, result) => { // Get user from database
                 if(err) console.log(err);
-                let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
-                // Set user to req.user
-                req.isAdmin = user.isAdmin;
-                req.username = user.username;
-                req.firstname = user.firstname;
-                req.lastname = user.lastname;
-                req.email = user.email;
+                if(result.length > 0){
+                    let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
+                    // Set user to req.user
+                    req.isAdmin = user.isAdmin;
+                    req.username = user.username;
+                    req.firstname = user.firstname;
+                    req.lastname = user.lastname;
+                    req.email = user.email;
+                    
+                }
                 next(); // Continue to next handler
             });
         }

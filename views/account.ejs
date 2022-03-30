@@ -6,41 +6,47 @@
 </head>
 <body>
     <%- include('partials/header'); %>
-    <h1>Ihr Konto</h1>
-    <div id="account-info">
-        <h3>Persönliche Informationen</h3>
-        <p><b>Vorname:</b> <%= firstname %></p>
-        <p><b>Nachname:</b> <%= lastname %></p>
-        <p><b>Benutzername: </b><%= username %></p>
-        <p><b>E-Mail: </b><%= email.substring(0,email.length/3) %><% for(var i = 0; i < email.length - email.length/4; i++){ %>*<% } %>
-        </p>
-    </div>
-
-    <div id="order-info">
-        <h3>Ihre Bestellungen</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Bestellnummer</th>
-                    <th>Produktname</th>
-                    <th>Anzahl</th>
-                    <th>Stückpreis</th>
-                    <th>Gesamtpreis</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(var i = 0; i < orders.length; i++){ %>
+    <div class="content">
+        <h1 class="text-center">Ihr Konto</h1>
+        <div id="account-info">
+            <h3>Persönliche Informationen</h3><br>
+            <p><b>Vorname:</b> <%= firstname %></p>
+            <p><b>Nachname:</b> <%= lastname %></p>
+            <p><b>Benutzername: </b><%= username %></p>
+            <p><b>E-Mail: </b><%= email.substring(0,email.length/3) %><% for(var i = 0; i < email.length - email.length/4; i++){ %>*<% } %>
+            <p><b>Adresse: </b></p>
+            </p>
+        </div>
+    
+        <div id="order-info">
+            <h3>Ihre Bestellungen</h3>
+            <table>
+                <thead>
                     <tr>
-                        <td><%= orders[i].id %></td>
-                        <td><%= orders[i].name %></td>
-                        <td><%= orders[i].quantity %></td>
-                        <td><%= orders[i].price %></td>
-                        <td><%= orders[i].price *  orders[i].quantity%> €</td>
+                        <th>Bestellnummer</th>
+                        <th>Produktname</th>
+                        <th>Status</th>
+                        <th>Anzahl</th>
+                        <th>Stückpreis</th>
+                        <th>Gesamtpreis</th>
                     </tr>
-                <% } %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% for(var i = 0; i < orders.length; i++){ %>
+                        <tr>
+                            <td><%= orders[i].id %></td>
+                            <td><%= orders[i].name %></td>
+                            <td>In Progress</td>
+                            <td><%= orders[i].quantity %></td>
+                            <td><%= orders[i].price %></td>
+                            <td><%= orders[i].price *  orders[i].quantity%> €</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
+   
 </body>
 
 </html>
