@@ -29,7 +29,7 @@
                     <div class="productData">
                         <a href="/product/<%=prod.id %>"><h4 style="color: Navy;"><%=prod.name %></h4></a>
 
-                        <h4><%=prod.price %>€</h4>
+                        <h4><%=prod.price.toFixed(2) %><small><small>€</small></small></h4>
                         <h4><%
                             if (prod.rating) {
                                 prod.rating = Math.round(prod.rating/2)
