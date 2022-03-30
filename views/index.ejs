@@ -1,103 +1,119 @@
 <!DOCTYPE html>
 <html lang="en" style="">
-	<head>
-		<%- include('partials/head'); %>
+
+<head>
+	<%- include('partials/head'); %>
 </head>
-	<body style="">
-		<%- include('partials/header'); %>
-			<style>
-				html {
+
+<body style="">
+	<%- include('partials/header'); %>
+		<style>
+			html {
 				height: 100%;
 				overflow-x: auto;
 				overflow-y: scroll;
 				margin: 0;
 				background-color: white;
-				}
-				body {
+			}
+
+			body {
 				min-height: 100%;
-				}
-				.grid-container {				
+			}
+
+			.grid-container {
 				display: flex;
 				gap: 20px;
 				margin: 0 auto;
-				grid-template-columns: auto auto auto auto;
 				padding: 20px;
-				}
-				.grid-item {
+			}
+
+			.grid-item {
 				background-color: white;
 				border: 10px;
-				border-color: rgba(111,111,111,0.2) transparent transparent;
+				border-color: rgba(111, 111, 111, 0.2) transparent transparent;
 				padding: 20px;
 				font-size: 20px;
 				height: 320px;
 				width: 280px;
 				text-align: left;
-				
-				}
 
-				.grid-item p{
-					display:block;
-					height: 50px;
-				}
-				.middle-content {
+			}
+
+			.grid-item p {
+				display: block;
+				height: 50px;
+			}
+
+			.middle-content {
 				background: linear-gradient(to bottom left, #313c48, white);
 				background-repeat: no-repeat;
 				width: 80%;
 				margin: auto;
 				margin-top: 50px;
-				}
-			</style>
-			<div class="middle-content">
-				<div id="headlineTop">
-					<h2 style="padding-left:20px; padding-top:50px">Top Angebote</h2>
-				</div>
-				<div class="grid-container" >
-					<% for (let i=0; i < products.length && i <=4; i++){ %>
+			}
+		</style>
+		<div class="middle-content">
+			<div id="headlineTop">
+				<h2 style="padding-left:20px; padding-top:50px">Top Angebote</h2>
+			</div>
+			<div class="grid-container">
+				<% for (let i=0; i < products.length && i <=4; i++){ %>
 					<div class="grid-item">
-						<p><%= products[i].name %></p>
-						
-						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/<%- products[i].id%>','_self')">
+						<p>
+							<%= products[i].name %>
+						</p>
+						<img src="/productImage/<%= products[i].id %>"
+							style='height: 100%; width: 100%; object-fit: contain'
+							onclick="window.open('/product/<%- products[i].id%>','_self')">
 					</div>
 					<%}%>
+			</div>
+			<div id="headlineTop">
+				<h2 style="padding-left:20px;">Unsere Empfehlungen für Sie</h2>
+			</div>
+			<div class="grid-container">
+				<div class="grid-item">
+					<% let randomNr=Math.floor(Math.random() * products.length); %>
+						<p><%= products[randomNr].name %></p>
+						<img src="/productImage/<%= products[randomNr].id %>"
+						style='height: 100%; width: 100%; object-fit: contain'
+						onclick="window.open('/product/<%- products[randomNr].id%>','_self')">
+							
 				</div>
-				<div id="headlineTop">
-					<h2 style="padding-left:20px;">Unsere Empfehlungen für Sie</h2>
+				<div class="grid-item">
+					<% let randomNr2=Math.floor(Math.random() * products.length); %>
+					<p><%= products[randomNr].name %></p>
+					<img src="/productImage/<%= products[randomNr2].id %>"
+					style='height: 100%; width: 100%; object-fit: contain'
+					onclick="window.open('/product/<%- products[randomNr2].id%>','_self')">
+
 				</div>
-				<div class="grid-container">
-					<div class="grid-item">
-					<% let randomNr = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr].name %>
-						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/<%- products[randomNr].id%>','_self')">
-					</div>
-					<div class="grid-item">
-						<% let randomNr2 = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr2].name %>
-						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/"<%- products[randomNr2].id%>','_self')">
-					
-					</div>
-					<div class="grid-item">
-						<% let randomNr3 = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr3].name %>
-						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/"<%- products[randomNr3].id%>','_self')">
-					
-					</div>
-					<div class="grid-item">
-						<% let randomNr4 = Math.floor(Math.random() * products.length); %>
-					<%= products[randomNr4].name %>
-						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/"<%- products[randomNr4].id%>','_self')">
-					
-					</div>
+				<div class="grid-item">
+					<% let randomNr3=Math.floor(Math.random() * products.length); %>
+					<p><%= products[randomNr].name %></p>
+					<img src="/productImage/<%= products[randomNr3].id %>"
+					style='height: 100%; width: 100%; object-fit: contain'
+					onclick="window.open('/product/<%- products[randomNr3].id%>','_self')">
+
 				</div>
-				<div class="grid-container" style="margin-bottom: 100px;">
-					<% for (let i=0; i < products.length && i <=4; i++){ %>
-					<div class="grid-item">
-						<%= products[i].name %>
-						<img src="https://m.media-amazon.com/images/I/815eDw--FQS._AC_SL1500_.jpg" style='height: 100%; width: 100%; object-fit: contain' onclick="window.open('/product/<%- products[i].id%>','_self')">
-					
-					</div>
-					<%}%>
+				<div class="grid-item">
+					<% let randomNr4=Math.floor(Math.random() * products.length); %>
+					<p><%= products[randomNr].name %></p>
+					<img src="/productImage/<%= products[randomNr4].id %>"
+					style='height: 100%; width: 100%; object-fit: contain'
+					onclick="window.open('/product/<%- products[randomNr4].id%>','_self')">
+
+				</div>
+				<div class="grid-item">
+					<% let randomNr5=Math.floor(Math.random() * products.length); %>
+					<p><%= products[randomNr].name %></p>
+					<img src="/productImage/<%= products[randomNr5].id %>"
+					style='height: 100%; width: 100%; object-fit: contain'
+					onclick="window.open('/product/<%- products[randomNr5].id%>','_self')">
 				</div>
 			</div>
+		</div>
 		<%- include('partials/footer'); %>
 </body>
+
 </html>

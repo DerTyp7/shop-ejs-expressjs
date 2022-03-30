@@ -113,15 +113,29 @@ function notAuthenticatedHandler(req, res, next){
 app.get("/", authNoRedirectHandler, (req, res) => { 
     mysql_handler.con.query("SELECT * FROM products", function(err, result){
         if(err) throw err;
-        
-        let dict = {
-            title: "Startseite",
-            user: req.user,
-            products: JSON.parse(JSON.stringify(result))
-        }
-        res.render('index', dict)
+        let products = JSON.parse(JSON.stringify(result));
+        mysql_handler.con.query("SELECT * FROM product_images", function(err, result){
+            if(err) throw err;
+            let dict = {
+                title: "Startseite",
+                user: req.user,
+                products: products,
+                product_images: JSON.parse(JSON.stringify(result)),
+            }
+            res.render('index', dict)
+        })
     });
 });
+app.get("/productImage/:productId", (req,res) => {
+    mysql_handler.con.query(`SELECT url FROM product_images WHERE product_id = ${req.params.productId} `,(err,result) =>{
+        if (result.length > 0){
+            res.redirect(JSON.parse(JSON.stringify(result))[0].url)
+        }
+        else {
+            res.redirect("/images/examples.jpg")
+        }
+    })
+})
 
 // Account
 app.get("/account", authenticatedHandler, (req, res) => { 
