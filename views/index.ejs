@@ -9,7 +9,7 @@
 	<%- include('partials/header'); %>
 		<style>
 			html {
-				height: 100%;
+				height: 100vh;
 				overflow-x: auto;
 				overflow-y: scroll;
 				margin: 0;
@@ -17,7 +17,10 @@
 			}
 
 			body {
-				min-height: 100%;
+				display: flex;
+				min-height: 100vh;
+				flex-direction: column;
+				justify-content: space-between;
 			}
 
 			.grid-container {
@@ -50,6 +53,7 @@
 				width: 80%;
 				margin: auto;
 				margin-top: 50px;
+				margin-bottom: 100px;
 			}
 		</style>
 		<div class="middle-content">
