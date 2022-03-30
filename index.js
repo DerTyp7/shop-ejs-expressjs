@@ -162,7 +162,7 @@ app.get("/account", authenticatedHandler, (req, res) => {
 app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
     let productId = req.params.productId;
     
-    mysql_handler.con.query(`SELECT s.name AS sellerName, p.name AS productName, p.description AS productDescription, p.id AS id, price,quantity, delivery_time, p.categoryId
+    mysql_handler.con.query(`SELECT s.name AS sellerName, p.name AS productName, p.description AS productDescription, p.id AS id, price,quantity, delivery_time
      FROM products AS p LEFT JOIN  sellers AS s ON p.sellerId= s.id WHERE p.id=${productId}` , function(err, result){
         if(err) throw err;
 
@@ -172,7 +172,7 @@ app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
             if(err) throw err;
             let reviews = JSON.parse(JSON.stringify(result));
             console.log(product)
-            mysql_handler.con.query(`SELECT * FROM categories WHERE id IN (SELECT category_id FROM product_categories WHERE product_id = ${product.categoryId})`,function(err,result){
+            mysql_handler.con.query(`SELECT * FROM categories WHERE id IN (SELECT category_id FROM product_categories WHERE product_id = ${product.id})`,function(err,result){
                 if(err) throw err;
                 let categories = JSON.parse(JSON.stringify(result));
 
@@ -217,7 +217,8 @@ app.get("/search/:query/",authNoRedirectHandler,(req, res) => {
         search: query,
         user: req.user, 
         sort: req.query.sort ? req.query.sort : 0,
-        Cat: req.query.cat ? req.query.cat : 0
+        Cat: req.query.cat ? req.query.cat : 0,
+        Brand: req.query.brand ? req.query.brand : 0
     }
 
     mysql_handler.con.query("SELECT * FROM categories;",function(err, result) {
@@ -225,11 +226,21 @@ app.get("/search/:query/",authNoRedirectHandler,(req, res) => {
 
         dict.categories = JSON.parse(JSON.stringify(result));
     });
+    mysql_handler.con.query("SELECT * FROM sellers;",function(err, result) {
+        if(err) throw err;
+
+        dict.brands = JSON.parse(JSON.stringify(result));
+    });
 
     var catQuery = "";
     var cat = req.query.cat;
     if (typeof cat !== 'undefined' && cat != 0) {
         catQuery = " AND (SELECT COUNT(*) FROM product_categories c WHERE c.category_id = "+cat+" AND c.product_id = p.id)";
+    }
+    var brandQuery = "";
+    var brand = req.query.brand;
+    if (typeof brand !== 'undefined' && brand != 0) {
+        brandQuery = " AND p.sellerid = "+brand;
     }
 
     var sortQuery = "";
@@ -248,7 +259,7 @@ app.get("/search/:query/",authNoRedirectHandler,(req, res) => {
         }
     }
     
-    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE name LIKE ? "+catQuery+" "+sortQuery+";",["%"+query+"%"],function(err, result){
+    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE name LIKE ? "+catQuery+" "+brandQuery+" "+sortQuery+";",["%"+query+"%"],function(err, result){
         if(err) throw err;
 
         dict.products = JSON.parse(JSON.stringify(result));

@@ -13,7 +13,14 @@
             <option value="0">Kategorie: Alle</option>
             <% for(var i=0; i < categories.length; i++) { var cat = categories[i]; %>
                 <option <%=Cat == cat.id ? "selected" : ""%> value="<%=cat.id%>">Kategorie: <%=cat.name %></option>
-            <% } console.log(sort) %>
+            <% } %>
+        </select>
+
+        <select id="brand-select" class="center" onchange="updateFilters();">
+            <option value="0">Hersteller: Alle</option>
+            <% for(var i=0; i < brands.length; i++) { var brand = brands[i]; %>
+                <option <%=Brand == brand.id ? "selected" : ""%> value="<%=brand.id%>">Hersteller: <%=brand.name %></option>
+            <% } %>
         </select>
 
         <select id="sort-select" class="right" onchange="updateFilters();">
@@ -85,8 +92,9 @@
 <script type="text/javascript">
     var cat = document.getElementById("cat-select");
     var sort = document.getElementById("sort-select");
+    var brand = document.getElementById("brand-select");
     function updateFilters() {
-        window.open('/search/<%=search %>/?cat='+cat.value+'&sort='+sort.value,'_self')
+        window.open('/search/<%=search %>/?cat='+cat.value+'&sort='+sort.value+'&brand='+brand.value,'_self')
     }
 
     function openProduct(id, newWindow) {
@@ -100,17 +108,6 @@
         display: block !important;
         min-height: 100vh;
         flex-direction:unset !important;
-    }
-
-    /* SEARCH INFO */
-    .productsResInfDIV {
-        position: relative;
-        left: calc(10% + 10px);
-        width: calc(80% - 20px);
-        margin-top: 10px;
-    }
-    .noProductsH {
-        text-align: center;
     }
 
     /* PRODUCT COLUMN */
@@ -187,16 +184,35 @@
     /* FILTERS */
     .filtersDIV {
         margin-top: 20px;
-        position: relative;
+        position: absolute;
         left: calc(10% + 10px);
         width: calc(80% - 20px);
         height: 30px;
     } 
-    .filtersDIV > .right {
-        float: right;
+    .filtersDIV > select {
+        position: absolute;
     }
-    .filtersDIV > .left{
-        float: left;
+    .filtersDIV > .right {
+        right: 0;
+    }
+    .filtersDIV > .center {
+        transform: translateX(-49%);
+        left: 50%;
+    }
+    .filtersDIV > .left {
+        left: 0;
+    }
+
+    /* SEARCH INFO */
+    .productsResInfDIV {
+        position: relative;
+        left: calc(10% + 10px);
+        width: calc(80% - 20px);
+        margin-top: 50px;
+    }
+    .noProductsH {
+        margin-top: 50px;
+        text-align: center;
     }
 
     /* PRODUCTS GRID */
