@@ -14,7 +14,7 @@
             <p><b>Nachname:</b> <%= lastname %></p>
             <p><b>Benutzername: </b><%= username %></p>
             <p><b>E-Mail: </b><%= email.substring(0,email.length/3) %><% for(var i = 0; i < email.length - email.length/4; i++){ %>*<% } %>
-            <p><b>Adresse: </b></p>
+            <p><b>Adresse: </b><%= address.street %> <%= address.housenumber %>, <%= address.postcode %> <%= address.name %>, <%= address.country %></p>
             </p>
         </div>
         

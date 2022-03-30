@@ -39,10 +39,8 @@ function authNoRedirectHandler(req, res, next){
 
                 if(err) console.log(err);
                 let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
-                console.log("Moin3")
                 try{
                     if(user.id){
-                        console.log("Moin4")
                         // Set user to req.user
                         req.isAdmin = user.isAdmin;
                         req.username = user.username;
@@ -54,7 +52,6 @@ function authNoRedirectHandler(req, res, next){
                     res.redirect('/logout')
                     return;
                 }
-                console.log("Moin5")
                 next(); // Continue to next handler
             });
         }
@@ -143,17 +140,25 @@ app.get("/account", authenticatedHandler, (req, res) => {
     FROM orders LEFT JOIN order_products ON orders.id=order_products.orderId
     LEFT JOIN products ON order_products.productId=products.id WHERE orders.userId = '${req.user}' ORDER BY orders.id DESC`, (err, result) => {
         if(err) console.log(err);
-        let dict = {
-            title: "Account",
-            user: req.user,
-            isAdmin: req.isAdmin,
-            username: req.username,
-            firstname: req.firstname,
-            lastname: req.lastname,
-            email: req.email,
-            orders: JSON.parse(JSON.stringify(result))
-        }
-        res.render('account', dict)
+        let orders = JSON.parse(JSON.stringify(result))
+
+        mysql_handler.con.query(`SELECT * FROM addresses LEFT JOIN cities ON addresses.cityId=cities.id WHERE addresses.userId=${req.user}`, (err, result) =>{
+            if(err) console.log(err);
+            
+            let dict = {
+                title: "Account",
+                user: req.user,
+                isAdmin: req.isAdmin,
+                username: req.username,
+                firstname: req.firstname,
+                lastname: req.lastname,
+                email: req.email,
+                orders: orders,
+                address: JSON.parse(JSON.stringify(result))[0],
+            }
+
+            res.render('account', dict)
+       });
     })
 });
 

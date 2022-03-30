@@ -95,18 +95,21 @@ function createUser(username, email, password, firstname, lastname, gender, stre
             con.query(`INSERT INTO userinfos(firstname, lastname, gender, userId) VALUES ('${firstname}','${lastname}','${gender}',
             (SELECT id FROM users WHERE username='${username}' AND email='${email}'))`, (err, result) => {
                 if(err) console.log(err);
+                // Create City
+                con.query(`INSERT INTO cities(name, postcode) VALUES ('${cityName}', '${postcode}')`, (err, result) => {
+                    if(err) console.log(err);
+                 
+                    // Create Address
+                    con.query(`INSERT INTO addresses(street, housenumber, country, userId, cityId) VALUES ('${street}','${housenumber}','${country}',
+                    (SELECT id FROM users WHERE username='${username}'), (SELECT id FROM cities WHERE name='${cityName}' AND postcode='${postcode}' LIMIT 1))`, (err, result) => { 
+                        if(err) console.log(err);
+
+                    });
+                });
             });
             
-            // Create City
-            con.query(`INSERT INTO cities(name, postcode) VALUES ('${cityName}', '${postcode}')`, (err, result) => {
-                if(err) console.log(err);
-            });
-            
-            // Create Address
-            con.query(`INSERT INTO addresses(street, housenumber, country, userId, cityId) VALUES ('${street}','${housenumber}','${country}',
-            (SELECT id FROM users WHERE username='${username}'), (SELECT id FROM cities WHERE name='${cityName}' AND postcode='${postcode}'))`, (err, result) => { 
-                if(err) console.log(err);
-            });
+           
+           
             
             console.log(`User created: ${username}!`);
         }
