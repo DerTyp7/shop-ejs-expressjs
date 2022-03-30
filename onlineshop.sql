@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 30. Mrz 2022 um 09:18
+-- Erstellungszeit: 30. Mrz 2022 um 14:57
 -- Server-Version: 10.4.22-MariaDB
 -- PHP-Version: 8.1.2
 
@@ -186,21 +186,44 @@ CREATE TABLE `products` (
   `description` text NOT NULL,
   `quantity` int(11) NOT NULL DEFAULT 0,
   `delivery_time` int(11) NOT NULL,
-  `sellerId` int(11) NOT NULL,
-  `categoryId` int(11) NOT NULL
+  `sellerId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Daten für Tabelle `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `price`, `description`, `quantity`, `delivery_time`, `sellerId`, `categoryId`) VALUES
-(1, 'LED Leiste mit RGBW', '3.56', 'Mit warmweiß funktion', 0, 2, 1, 1),
-(2, 'Nagel ', '2.00', 'Gut zum nageln', 83, 2, 1, 3),
-(3, 'Glühbirne x35 10000000 Watt', '1.60', 'Glühbirne mit viel Watt', 0, 2, 1, 1),
-(4, 'LG TV 500x QHD', '130.99', 'Richtig guter TV mit perfekter Qualität', 23, 3, 1, 4),
-(5, 'Raspberry Pi 4, Raspberry Pi Starter Kit (4GB RAM / 32GB SD)', '209.99', 'Raspberry Pi 4 4GB RAM: New SOC Broadcom BCM2711, 1.5GHz Quad-Core ARM Cortex-A72 CPU. Dual band 802.11b/g/n/ac WiFi (2.4/5.0 GHz) and BT 5.0 module for fast wireless networking with less interference and better reception.\r\nHigh Capacity - 2×USB 3 0 Ports, 2 × USB 2 0 ports and 2 × Micro HDMI ports. The HEVC 4K streams can support at 60 fps and manage 2 screens in 4K.\r\n32GB Class 10 SD Card: pre-installed with Raspberry Pi OS (Raspbian), can be easily booted with Raspbian for Raspberry Pi 4. Equipped with an SD card reader that is compatible with USB-A & USB-C C, easy to connect microSD to the computer.\r\nPowerful Cooling System: Equipped with 1 mini heat sink fan and 3 copper heat sink, your Raspberry Pi 4 can provide impeccable heat dissipation and prevent system failure. Uniquely designed premium housing provides enough space for fan and gap for heat dissipation.\r\nProfessional power supply with on/off switch: 1.5M/5V 3A USB-C power supply with noise filter and on/off switch, specially designed and tested for Raspberry Pi 4 (UL Listed) low-loss power transmission, thick and durable.\r\n', 8345, 3, 2, 5),
-(6, 'Be Quiet Straight Power 11 Power Supply, Black 1000W', '179.43', 'Ausgestattet mit einem nahezu unhörbaren SilentWings3 135mm Lüfter\nDas be quiet! Straight Power 11 1000W setzt neue Maßstäbe für flüsterleise Systeme, ohne auch nur geringste Kompromisse bei der Stromversorgung einzugehen\nGesteigerte Spannungsregulierung und Stabilität dank fortschrittlicher LLC, SR und DC/DC Technologie\nKomfortables vollmodulares Kabelmanagement sorgt für maximale Flexibilität und einfache Bedienung\nProduktkonzeption, Design und Qualitätskontrolle in Deutschland\n', 453, 4, 1, 5);
+INSERT INTO `products` (`id`, `name`, `price`, `description`, `quantity`, `delivery_time`, `sellerId`) VALUES
+(1, 'LED Leiste mit RGBW', '3.56', 'Mit warmweiß funktion', 0, 2, 1),
+(2, 'Nagel ', '2.00', 'Gut zum nageln', 83, 2, 1),
+(3, 'Glühbirne x35 10000000 Watt', '1.60', 'Glühbirne mit viel Watt', 0, 2, 1),
+(4, 'LG TV 500x QHD', '130.99', 'Richtig guter TV mit perfekter Qualität', 23, 3, 1),
+(5, 'Raspberry Pi 4, Raspberry Pi Starter Kit (4GB RAM / 32GB SD)', '209.99', 'Raspberry Pi 4 4GB RAM: New SOC Broadcom BCM2711, 1.5GHz Quad-Core ARM Cortex-A72 CPU. Dual band 802.11b/g/n/ac WiFi (2.4/5.0 GHz) and BT 5.0 module for fast wireless networking with less interference and better reception.\r\nHigh Capacity - 2×USB 3 0 Ports, 2 × USB 2 0 ports and 2 × Micro HDMI ports. The HEVC 4K streams can support at 60 fps and manage 2 screens in 4K.\r\n32GB Class 10 SD Card: pre-installed with Raspberry Pi OS (Raspbian), can be easily booted with Raspbian for Raspberry Pi 4. Equipped with an SD card reader that is compatible with USB-A & USB-C C, easy to connect microSD to the computer.\r\nPowerful Cooling System: Equipped with 1 mini heat sink fan and 3 copper heat sink, your Raspberry Pi 4 can provide impeccable heat dissipation and prevent system failure. Uniquely designed premium housing provides enough space for fan and gap for heat dissipation.\r\nProfessional power supply with on/off switch: 1.5M/5V 3A USB-C power supply with noise filter and on/off switch, specially designed and tested for Raspberry Pi 4 (UL Listed) low-loss power transmission, thick and durable.\r\n', 8345, 3, 2),
+(6, 'Be Quiet Straight Power 11 Power Supply, Black 1000W', '179.43', 'Ausgestattet mit einem nahezu unhörbaren SilentWings3 135mm Lüfter\nDas be quiet! Straight Power 11 1000W setzt neue Maßstäbe für flüsterleise Systeme, ohne auch nur geringste Kompromisse bei der Stromversorgung einzugehen\nGesteigerte Spannungsregulierung und Stabilität dank fortschrittlicher LLC, SR und DC/DC Technologie\nKomfortables vollmodulares Kabelmanagement sorgt für maximale Flexibilität und einfache Bedienung\nProduktkonzeption, Design und Qualitätskontrolle in Deutschland\n', 453, 4, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `product_categories`
+--
+
+CREATE TABLE `product_categories` (
+  `product_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Daten für Tabelle `product_categories`
+--
+
+INSERT INTO `product_categories` (`product_id`, `category_id`) VALUES
+(6, 1),
+(4, 5),
+(4, 4),
+(4, 1),
+(2, 3),
+(5, 1),
+(5, 5);
 
 -- --------------------------------------------------------
 
@@ -379,8 +402,14 @@ ALTER TABLE `order_status`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `article_ibfk_1` (`sellerId`),
-  ADD KEY `article_ibfk_2` (`categoryId`);
+  ADD KEY `article_ibfk_1` (`sellerId`);
+
+--
+-- Indizes für die Tabelle `product_categories`
+--
+ALTER TABLE `product_categories`
+  ADD KEY `product_id` (`product_id`),
+  ADD KEY `category_id` (`category_id`);
 
 --
 -- Indizes für die Tabelle `product_images`
@@ -536,8 +565,14 @@ ALTER TABLE `order_products`
 -- Constraints der Tabelle `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `products_ibfk_2` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`sellerId`) REFERENCES `sellers` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints der Tabelle `product_categories`
+--
+ALTER TABLE `product_categories`
+  ADD CONSTRAINT `product_categories_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `product_categories_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
 
 --
 -- Constraints der Tabelle `product_images`
