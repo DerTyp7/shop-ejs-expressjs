@@ -1,10 +1,14 @@
 <div class="headerDIV">
     <div class="headerDIVLogo">
-        <img style="cursor:pointer"onclick="window.open('/', '_self')" src="https://bock-drauf.com/wp-content/uploads/2019/09/amazon-logo-1024x576.png">
-    </div><div class="headerDIVSearch">
-        <input placeholder="Suche" class="vertical-center"></input
-        ><button class="vertical-center"><i class="material-icons">search</i></button>
-    </div><div class="headerDIVButton">
+        <img style="cursor:pointer" onclick="window.open('/', '_self')" src="https://bock-drauf.com/wp-content/uploads/2019/09/amazon-logo-1024x576.png">
+    </div>
+
+    <div class="headerDIVSearch">
+        <input placeholder="Suche" class="vertical-center" id="searchbar" value="<%=typeof search !== 'undefined' ? search : '' %>"></input>
+        <button class="vertical-center" onclick="doSearch()"><i class="material-icons">search</i></button>
+    </div>
+
+    <div class="headerDIVUser">
         <% if(user){ %>
             <button class="vertical-center" id="headerBtnLogout" onclick="window.open('/logout', '_self')">Log out</button>
             <button class="vertical-center" onclick="window.open('/account', '_self')">Ihr Konto</button>
@@ -14,3 +18,21 @@
         <% } %>
     </div>
 </div>
+
+
+<script>
+    var input = document.getElementById("searchbar");
+    input.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            doSearch();
+        }
+    });
+
+    function doSearch() {
+        var val = input.value.trim()
+        if (val) {
+            window.open('/search/'+val, '_self')
+        }
+    }
+</script>
