@@ -29,18 +29,19 @@ app.use(express.static(__dirname + "/static"));
 function authNoRedirectHandler(req, res, next){
     const authcookie = req.cookies.authcookie; // Get authcookie from cookie
 
-    jwt.verify(authcookie, SECRET_KEY, (err, data) =>{  // Verify authcookie
-        if(err){ // If authcookie is invalid
-            console.log(err);
-            next();
-        } else if(data.user){ // If authcookie is valid
-            req.user = data.user; // Set user to data.user
-            mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
+    if(authcookie){
+        jwt.verify(authcookie, SECRET_KEY, (err, data) =>{  // Verify authcookie
+            if(err){ // If authcookie is invalid
+                console.log(err);
+                req.user = false;
+                next();
+            } else if(data.user){ // If authcookie is valid
+                req.user = data.user; // Set user to data.user
+                mysql_handler.con.query(`SELECT * FROM users WHERE id = "${req.user}"`, (err, result) => { // Get user from database
 
-                if(err) console.log(err);
-                let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
-                try{
-                    if(user.id){
+                    if(err) console.log(err);
+                    let user = JSON.parse(JSON.stringify(result))[0]; // Parse user from database
+                    if(result.length > 0){
                         // Set user to req.user
                         req.isAdmin = user.isAdmin;
                         req.username = user.username;
@@ -48,14 +49,15 @@ function authNoRedirectHandler(req, res, next){
                         req.lastname = user.lastname;
                         req.email = user.email;
                     }
-                }catch{
-                    res.redirect('/logout')
-                    return;
-                }
-                next(); // Continue to next handler
-            });
-        }
-    });
+                    next(); // Continue to next handler
+                });
+            }
+        });
+    }else{
+        console.log("No Redirect: Not autheticated")
+        req.user = false;
+        next();
+    }
 }
 
 
@@ -108,9 +110,11 @@ function notAuthenticatedHandler(req, res, next){
 
 // Homepage
 app.get("/", authNoRedirectHandler, (req, res) => { 
+
     mysql_handler.con.query("SELECT * FROM products", function(err, result){
         if(err) throw err;
         let products = JSON.parse(JSON.stringify(result));
+
         mysql_handler.con.query("SELECT * FROM product_images", function(err, result){
             if(err) throw err;
             let dict = {
@@ -176,7 +180,7 @@ app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
         mysql_handler.con.query(`SELECT title, content ,rating, u.username AS name FROM reviews AS r LEFT JOIN users AS u ON r.userId = u.id WHERE productId=${productId}`,function(err,result){
             if(err) throw err;
             let reviews = JSON.parse(JSON.stringify(result));
-            console.log(product)
+
             mysql_handler.con.query(`SELECT * FROM categories WHERE id IN (SELECT category_id FROM product_categories WHERE product_id = ${product.id})`,function(err,result){
                 if(err) throw err;
                 let categories = JSON.parse(JSON.stringify(result));
