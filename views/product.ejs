@@ -13,7 +13,9 @@
     <div class="content">
         <section class="product-header">
             <div id="product-image">
-                <img src="/productImage/<%= product.id %>" alt="">
+                <img src="<%=images[0].url %>" alt="" id="productIMG">
+                <button style="left: 0" onclick="swImg(1)"><</button>
+                <button style="right: 0" onclick="swImg(-1)">></button>
             </div>
             <div id="product-info">
                 <h2 style="padding-left: 0px"><%= product.productName %></h2><br>
@@ -99,3 +101,23 @@
     <%- include('partials/footer'); %>
 </body>
 </html>
+
+<script type="text/javascript">
+    var curImg = 0;
+    var images = [
+        <% for (var i=1; i < images.length; i++) { var url = images[i].url; %>
+            "<%=images[i].url %>",
+        <% } %>
+    ];
+    function swImg(dir) {
+        curImg = curImg + dir;
+        console.log(curImg)
+        if (curImg > (images.length - 1)) {
+            curImg = 0;
+        } else if (curImg == -1) {
+            curImg = images.length - 1;
+        }
+
+        document.getElementById("productIMG").src = images[curImg];
+    }
+</script>

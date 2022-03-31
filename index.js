@@ -185,18 +185,24 @@ app.get("/product/:productId", authNoRedirectHandler, (req, res) => {
                 if(err) throw err;
                 let categories = JSON.parse(JSON.stringify(result));
 
-                let dict = {
-                    title: product.productName,
-                    product: product,
-                    shippingDays: 3,
-                    stockAmount: 50,
-                    productDescription: "ez",
-                    loggedIn: true,
-                    reviews: reviews,
-                    categories: categories, 
-                    user: req.user,                   
-                }
-                res.render('product', dict)
+                mysql_handler.con.query(`SELECT url FROM product_images WHERE product_id = ${product.id};`,function(err,result){
+                    if(err) throw err;
+                    let images = JSON.parse(JSON.stringify(result));
+
+                    let dict = {
+                        title: product.productName,
+                        product: product,
+                        shippingDays: 3,
+                        stockAmount: 50,
+                        productDescription: "ez",
+                        loggedIn: true,
+                        reviews: reviews,
+                        categories: categories, 
+                        images: images, 
+                        user: req.user,                   
+                    }
+                    res.render('product', dict)
+                });
             });
         });
         
