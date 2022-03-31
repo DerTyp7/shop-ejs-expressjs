@@ -65,16 +65,16 @@
             <form class="product-form" action="/review/create/<%= product.id %>" method="post">
                 <label for="title">
                     <p>Titel: </p>
-                    <input type="text" name="title">
+                    <input required type="text" name="title">
                 </label>
 
                 <label for="rating">
                     <p>Bewertung (0-10): </p>
-                    <input type="number" name="rating" max="10" min="0">
+                    <input required type="number" name="rating" max="10" min="0">
                 </label>
 
                 <label for="content">
-                    <textarea name="content" id="" max="500" cols="30" rows="10"></textarea>
+                    <textarea required name="content" id="" max="500" cols="30" rows="10"></textarea>
                 </label>
                 
                 <input style="width: 150px" type="submit" value="Senden">

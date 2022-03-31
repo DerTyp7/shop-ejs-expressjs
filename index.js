@@ -532,7 +532,7 @@ app.post("/auth/login", notAuthenticatedHandler, (req, res) =>{
     let username = req.body.username;
     let password = req.body.password;
 
-    error = "" // Error message
+    let error = "" // Error message
        
     mysql_handler.con.query(`SELECT * FROM users WHERE username = "${username}"`, function(err, result){ // Get user from database
         if(err){ // If there is an error
