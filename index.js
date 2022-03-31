@@ -274,7 +274,7 @@ app.get("/search/:query/",authNoRedirectHandler,(req, res) => {
         }
     }
     
-    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE p.name LIKE ? OR p.id IN (SELECT pc.product_id FROM categories c, product_categories pc WHERE c.id = pc.category_id AND c.name LIKE ?) "+catQuery+" "+brandQuery+" "+sortQuery+";",["%"+query+"%","%"+query+"%"],function(err, result){
+    mysql_handler.con.query("SELECT *, (SELECT url FROM product_images i WHERE i.product_id = p.id LIMIT 1) as img, (SELECT AVG(rating) FROM reviews r WHERE r.productId = p.id) as rating FROM products p WHERE (p.name LIKE ? OR p.id IN (SELECT pc.product_id FROM categories c, product_categories pc WHERE c.id = pc.category_id AND c.name LIKE ?)) "+catQuery+" "+brandQuery+" "+sortQuery+";",["%"+query+"%","%"+query+"%"],function(err, result){
         if(err) throw err;
 
         dict.products = JSON.parse(JSON.stringify(result));
