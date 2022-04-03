@@ -310,10 +310,11 @@ function submitForm(){
         data : formObj,
         success: function(data)
         {
-            if(data == "0"){
-                window.location.href = "/login";
-            }else{
+            if(data != "0"){
                 handleError(data);
+                
+            }else{
+                window.location.href = "/login"
             }
         },
         error: function (jqXHR, textStatus, errorThrown)
